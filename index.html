@@ -1,543 +1,1440 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aethyro — Private AI for Accounting Firms</title>
-  <meta name="description" content="Aethyro gives CPA and accounting firms a private, local AI that handles tax research, compliance drafting, and client work — without sending a single file to the cloud." />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aethyro — The Agentic AI Platform</title>
+  <meta name="description" content="Browse agents, buy software, access AI research, purchase training data. The platform where the AI ecosystem converges."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#030303;
+      --s1:#0a0a0a;
+      --s2:#111214;
+      --s3:#161719;
+      --b1:#1c1c1e;
+      --b2:#2a2a2d;
+      --b3:#3a3a3e;
+      --orange:#ff4d00;
+      --orange2:#ff7a3d;
+      --cyan:#00d4ff;
+      --violet:#8b5cf6;
+      --green:#22c55e;
+      --gold:#f59e0b;
+      --red:#ef4444;
+      --text:#f0f0f0;
+      --t2:#aaaaaa;
+      --t3:#555;
+      --white:#ffffff;
+      --font:'Space Grotesk',system-ui,sans-serif;
+      --mono:'JetBrains Mono',monospace;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
 
-    :root {
-      --navy:   #0a0f1e;
-      --dark:   #0f172a;
-      --card:   #141c30;
-      --border: #1e2d4a;
-      --accent: #3b82f6;
-      --accent2: #06b6d4;
-      --gold:   #f59e0b;
-      --text:   #e2e8f0;
-      --muted:  #94a3b8;
-      --white:  #ffffff;
+    /* ── NOISE OVERLAY ── */
+    body::after{
+      content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity:0.35;
     }
 
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--navy);
-      color: var(--text);
-      line-height: 1.6;
+    /* ── TICKER ── */
+    .ticker{
+      position:relative;z-index:100;
+      background:linear-gradient(90deg,#ff4d00,#ff7a3d,#ff4d00);
+      background-size:200% auto;
+      animation:ticker-bg 4s linear infinite;
+      overflow:hidden;height:32px;display:flex;align-items:center;
     }
+    @keyframes ticker-bg{to{background-position:200% center}}
+    .ticker-track{
+      display:flex;gap:0;white-space:nowrap;
+      animation:ticker-scroll 40s linear infinite;
+    }
+    .ticker-track:hover{animation-play-state:paused}
+    @keyframes ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .ticker-item{
+      padding:0 2.5rem;font-size:.72rem;font-weight:700;letter-spacing:.04em;
+      color:#000;display:inline-flex;align-items:center;gap:.5rem;
+    }
+    .ticker-dot{width:5px;height:5px;background:#000;border-radius:50%;opacity:.5}
 
     /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 2rem;
-      background: rgba(10, 15, 30, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+    nav{
+      position:sticky;top:0;z-index:200;
+      background:rgba(3,3,3,0.85);backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--b1);
     }
-    .nav-logo {
-      font-size: 1.4rem; font-weight: 700; letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #3b82f6, #06b6d4);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    .nav-inner{
+      max-width:1200px;margin:0 auto;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:.7rem 2rem;gap:1rem;
     }
-    .nav-cta {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.55rem 1.25rem;
-      background: var(--accent); color: #fff;
-      border-radius: 8px; text-decoration: none;
-      font-size: 0.9rem; font-weight: 600;
-      transition: background 0.2s, transform 0.15s;
+    .nav-logo{
+      font-size:1.25rem;font-weight:800;letter-spacing:-1px;text-decoration:none;
+      color:var(--white);display:flex;align-items:center;gap:.4rem;
     }
-    .nav-cta:hover { background: #2563eb; transform: translateY(-1px); }
+    .nav-logo-dot{
+      width:8px;height:8px;border-radius:50%;
+      background:var(--orange);box-shadow:0 0 10px var(--orange);
+      animation:pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot{0%,100%{box-shadow:0 0 8px var(--orange)}50%{box-shadow:0 0 18px var(--orange),0 0 30px rgba(255,77,0,.3)}}
+    .nav-links{display:flex;gap:.25rem}
+    .nav-link{
+      padding:.4rem .9rem;font-size:.8rem;font-weight:600;color:var(--t2);
+      text-decoration:none;border-radius:6px;transition:all .15s;
+    }
+    .nav-link:hover{color:var(--text);background:rgba(255,255,255,.05)}
+    .nav-right{display:flex;align-items:center;gap:.75rem}
+    .btn-nav{
+      padding:.5rem 1.25rem;font-size:.82rem;font-weight:700;
+      text-decoration:none;border-radius:8px;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem;
+    }
+    .btn-nav-orange{
+      background:var(--orange);color:#fff;
+      box-shadow:0 0 20px rgba(255,77,0,.35);
+    }
+    .btn-nav-orange:hover{background:var(--orange2);box-shadow:0 0 30px rgba(255,77,0,.5);transform:translateY(-1px)}
 
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center;
-      padding: 8rem 1.5rem 5rem;
-      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,0.12) 0%, transparent 70%);
-      position: relative; overflow: hidden;
+    /* ── SHARED ── */
+    section{position:relative;z-index:1}
+    .container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+    .sec-eyebrow{
+      display:inline-flex;align-items:center;gap:.5rem;
+      font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;
+      color:var(--orange);margin-bottom:.85rem;font-family:var(--mono);
     }
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(circle at 20% 80%, rgba(6,182,212,0.06) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(59,130,246,0.08) 0%, transparent 50%);
-      pointer-events: none;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.4rem 1rem;
-      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3);
-      border-radius: 100px; font-size: 0.8rem; color: #93c5fd;
-      margin-bottom: 1.75rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600;
-    }
-    .hero-badge span { width: 7px; height: 7px; background: #3b82f6; border-radius: 50%; display: inline-block; }
-    h1 {
-      font-size: clamp(2.4rem, 5.5vw, 4rem);
-      font-weight: 800; line-height: 1.1; letter-spacing: -1px;
-      max-width: 820px; margin-bottom: 1.5rem;
-    }
-    h1 em {
-      font-style: normal;
-      background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .hero-sub {
-      font-size: clamp(1rem, 2vw, 1.2rem); color: var(--muted);
-      max-width: 600px; margin-bottom: 2.5rem; line-height: 1.7;
-    }
-    .hero-actions {
-      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
-    }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.85rem 2rem;
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      color: #fff; border-radius: 10px; text-decoration: none;
-      font-size: 1rem; font-weight: 700;
-      box-shadow: 0 4px 24px rgba(59,130,246,0.35);
-      transition: transform 0.15s, box-shadow 0.2s;
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(59,130,246,0.45); }
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.85rem 2rem;
-      background: transparent; color: var(--text);
-      border: 1px solid var(--border); border-radius: 10px; text-decoration: none;
-      font-size: 1rem; font-weight: 600;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .btn-secondary:hover { border-color: var(--accent); background: rgba(59,130,246,0.06); }
-    .hero-proof {
-      margin-top: 3.5rem;
-      display: flex; gap: 2.5rem; flex-wrap: wrap; justify-content: center;
-    }
-    .proof-stat { text-align: center; }
-    .proof-stat strong { display: block; font-size: 1.7rem; font-weight: 800; color: var(--white); }
-    .proof-stat span { font-size: 0.82rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .sec-eyebrow::before{content:'//';opacity:.5}
+    h2{font-size:clamp(2rem,3.5vw,3rem);font-weight:800;line-height:1.08;letter-spacing:-1px;margin-bottom:1rem}
+    .sec-sub{color:var(--t2);font-size:1rem;line-height:1.75;max-width:520px}
+    .grad-orange{background:linear-gradient(135deg,#ff4d00,#ff7a3d);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .grad-cyan{background:linear-gradient(135deg,#00d4ff,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .grad-mix{background:linear-gradient(135deg,#ff4d00 0%,#ff7a3d 30%,#00d4ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-    /* ── SECTION COMMON ── */
-    section { padding: 6rem 1.5rem; }
-    .container { max-width: 1100px; margin: 0 auto; }
-    .section-label {
-      display: inline-block;
-      font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
-      color: var(--accent2); margin-bottom: 0.75rem;
-    }
-    h2 {
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-      font-weight: 800; line-height: 1.15; letter-spacing: -0.5px;
-      margin-bottom: 1rem;
-    }
-    .section-intro { color: var(--muted); max-width: 560px; font-size: 1.05rem; line-height: 1.7; }
+    /* ── BUTTONS ── */
+    .btn{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--font);font-weight:700;text-decoration:none;border-radius:10px;transition:all .2s;cursor:pointer;border:none}
+    .btn-lg{padding:.9rem 2rem;font-size:.95rem}
+    .btn-sm{padding:.5rem 1.1rem;font-size:.8rem;border-radius:8px}
+    .btn-orange{background:var(--orange);color:#fff;box-shadow:0 0 24px rgba(255,77,0,.3)}
+    .btn-orange:hover{background:var(--orange2);box-shadow:0 0 36px rgba(255,77,0,.45);transform:translateY(-2px)}
+    .btn-ghost{background:rgba(255,255,255,.05);color:var(--text);border:1px solid var(--b2)}
+    .btn-ghost:hover{border-color:var(--b3);background:rgba(255,255,255,.08)}
+    .btn-cyan{background:rgba(0,212,255,.1);color:var(--cyan);border:1px solid rgba(0,212,255,.25)}
+    .btn-cyan:hover{background:rgba(0,212,255,.18)}
+    .btn-green{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+    .btn-green:hover{background:rgba(34,197,94,.18)}
+    .btn-violet{background:rgba(139,92,246,.1);color:var(--violet);border:1px solid rgba(139,92,246,.25)}
+    .btn-violet:hover{background:rgba(139,92,246,.18)}
 
-    /* ── PROBLEM ── */
-    .problem-section { background: var(--dark); }
-    .problem-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.25rem; margin-top: 3rem;
-    }
-    .problem-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 1.75rem;
-    }
-    .problem-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
-    .problem-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--white); }
-    .problem-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+    /* ── BADGE ── */
+    .badge{padding:.2rem .55rem;border-radius:5px;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono);white-space:nowrap}
+    .b-orange{background:rgba(255,77,0,.12);color:#ff7a3d;border:1px solid rgba(255,77,0,.2)}
+    .b-cyan{background:rgba(0,212,255,.1);color:var(--cyan);border:1px solid rgba(0,212,255,.2)}
+    .b-violet{background:rgba(139,92,246,.1);color:#c4b5fd;border:1px solid rgba(139,92,246,.2)}
+    .b-green{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2)}
+    .b-gold{background:rgba(245,158,11,.1);color:#fcd34d;border:1px solid rgba(245,158,11,.2)}
+    .b-red{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.2)}
+    .b-featured{background:linear-gradient(135deg,rgba(255,77,0,.18),rgba(0,212,255,.12));color:#ff9966;border:1px solid rgba(255,77,0,.3)}
+    .b-live{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25);display:inline-flex;align-items:center;gap:.35rem}
+    .b-live::before{content:'';width:5px;height:5px;background:var(--green);border-radius:50%;animation:pulse-dot 1.5s infinite}
+    .b-new{animation:glow-badge 2s infinite}
+    @keyframes glow-badge{0%,100%{box-shadow:none}50%{box-shadow:0 0 10px rgba(239,68,68,.3)}}
+    .b-sponsored{background:rgba(139,92,246,.1);color:#c4b5fd;border:1px solid rgba(139,92,246,.25)}
 
-    /* ── SOLUTION ── */
-    .solution-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem; margin-top: 3rem;
-    }
-    .solution-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 2rem;
-      transition: border-color 0.2s, transform 0.15s;
-    }
-    .solution-card:hover { border-color: rgba(59,130,246,0.4); transform: translateY(-3px); }
-    .solution-number {
-      font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
-      color: var(--accent); margin-bottom: 0.75rem;
-    }
-    .solution-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--white); }
-    .solution-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
-
-    /* ── PRIVACY ── */
-    .privacy-section { background: var(--dark); }
-    .privacy-block {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
-      align-items: center; margin-top: 3rem;
-    }
-    .privacy-list { list-style: none; margin-top: 1.5rem; }
-    .privacy-list li {
-      display: flex; align-items: flex-start; gap: 0.75rem;
-      padding: 0.85rem 0; border-bottom: 1px solid var(--border);
-      font-size: 0.95rem;
-    }
-    .privacy-list li:last-child { border-bottom: none; }
-    .privacy-list .check { color: #22c55e; font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
-    .privacy-visual {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 18px; padding: 2rem;
-    }
-    .flow-step {
-      display: flex; align-items: center; gap: 1rem;
-      padding: 0.85rem 1rem;
-      background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.15);
-      border-radius: 10px; margin-bottom: 0.6rem;
-    }
-    .flow-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-    .flow-dot.green { background: #22c55e; }
-    .flow-dot.blue  { background: #3b82f6; }
-    .flow-dot.cyan  { background: #06b6d4; }
-    .flow-step span { font-size: 0.875rem; color: var(--text); }
-    .flow-divider { text-align: center; color: var(--muted); font-size: 1.2rem; margin: 0.3rem 0; }
-    .flow-blocked {
-      padding: 0.85rem 1rem;
-      background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2);
-      border-radius: 10px; text-align: center;
-      font-size: 0.8rem; color: #f87171; margin-top: 0.4rem;
+    /* ── GRADIENT BORDER CARD ── */
+    .gb-card{
+      position:relative;border-radius:16px;
+      background:linear-gradient(var(--s2),var(--s2)) padding-box,
+                 linear-gradient(135deg,rgba(255,77,0,.5),rgba(0,212,255,.4)) border-box;
+      border:1px solid transparent;
     }
 
-    /* ── USE CASES ── */
-    .use-cases-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.25rem; margin-top: 3rem;
+    /* ─────────────────────────────
+       HERO
+    ───────────────────────────── */
+    .hero{
+      min-height:100vh;padding:7rem 1.5rem 5rem;
+      display:grid;grid-template-columns:1fr 440px;gap:4rem;
+      align-items:center;max-width:1200px;margin:0 auto;
+      position:relative;
     }
-    .use-case {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 1.75rem;
+    .hero-orb{
+      position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;
     }
-    .use-case-tag {
-      display: inline-block; padding: 0.25rem 0.75rem;
-      background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.25);
-      border-radius: 6px; font-size: 0.72rem; font-weight: 700;
-      color: var(--accent2); text-transform: uppercase; letter-spacing: 0.06em;
-      margin-bottom: 0.85rem;
+    .orb-orange{
+      width:500px;height:500px;
+      background:radial-gradient(circle,rgba(255,77,0,.15) 0%,transparent 70%);
+      top:-100px;left:-100px;
+      animation:orb-float 8s ease-in-out infinite;
     }
-    .use-case h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--white); }
-    .use-case p { font-size: 0.86rem; color: var(--muted); line-height: 1.6; }
+    .orb-cyan{
+      width:400px;height:400px;
+      background:radial-gradient(circle,rgba(0,212,255,.1) 0%,transparent 70%);
+      bottom:0;right:200px;
+      animation:orb-float 10s ease-in-out infinite reverse;
+    }
+    .orb-violet{
+      width:300px;height:300px;
+      background:radial-gradient(circle,rgba(139,92,246,.08) 0%,transparent 70%);
+      top:50%;left:40%;
+      animation:orb-float 12s ease-in-out infinite 2s;
+    }
+    @keyframes orb-float{
+      0%,100%{transform:translate(0,0)}
+      33%{transform:translate(40px,-30px)}
+      66%{transform:translate(-20px,25px)}
+    }
+    .hero-left{position:relative;z-index:2}
+    .hero-status{
+      display:inline-flex;align-items:center;gap:.6rem;
+      padding:.35rem .85rem;
+      background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);
+      border-radius:100px;font-size:.72rem;font-weight:600;color:var(--green);
+      margin-bottom:2rem;font-family:var(--mono);
+    }
+    .hero h1{
+      font-size:clamp(3rem,6vw,5.5rem);font-weight:800;line-height:1.0;
+      letter-spacing:-2.5px;margin-bottom:1.5rem;
+    }
+    .hero-sub{
+      font-size:1.1rem;color:var(--t2);line-height:1.75;
+      max-width:520px;margin-bottom:2.5rem;
+    }
+    .hero-actions{display:flex;gap:.85rem;flex-wrap:wrap;margin-bottom:3rem}
+    .hero-meta{
+      display:flex;gap:2.5rem;flex-wrap:wrap;
+      padding-top:2rem;border-top:1px solid var(--b1);
+    }
+    .meta-stat{}
+    .meta-stat strong{display:block;font-size:1.6rem;font-weight:800;color:var(--white);letter-spacing:-1px;font-family:var(--mono)}
+    .meta-stat span{font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:.08em}
 
-    /* ── PRICING ── */
-    .pricing-section { background: var(--dark); }
-    .pricing-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem; margin-top: 3rem; max-width: 860px; margin-left: auto; margin-right: auto;
+    /* TERMINAL CARD */
+    .hero-terminal{
+      position:relative;z-index:2;
+      background:var(--s2);border:1px solid var(--b2);
+      border-radius:16px;overflow:hidden;
+      box-shadow:0 0 60px rgba(0,0,0,.8),0 0 1px rgba(255,255,255,.05);
     }
-    .pricing-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 18px; padding: 2.25rem;
-      position: relative;
+    .term-bar{
+      display:flex;align-items:center;gap:.5rem;
+      padding:.75rem 1rem;background:var(--b1);border-bottom:1px solid var(--b2);
     }
-    .pricing-card.featured {
-      border-color: var(--accent);
-      background: linear-gradient(160deg, rgba(59,130,246,0.1) 0%, var(--card) 60%);
+    .term-dot{width:10px;height:10px;border-radius:50%}
+    .term-title{font-size:.72rem;font-family:var(--mono);color:var(--t3);margin-left:auto}
+    .term-body{padding:1.25rem;font-family:var(--mono);font-size:.8rem;line-height:1.9}
+    .t-prompt{color:var(--orange)}
+    .t-cmd{color:var(--text)}
+    .t-key{color:var(--cyan)}
+    .t-val{color:var(--green)}
+    .t-val-warn{color:var(--gold)}
+    .t-comment{color:var(--t3)}
+    .t-cursor{
+      display:inline-block;width:8px;height:14px;background:var(--orange);
+      vertical-align:middle;margin-left:2px;
+      animation:cursor-blink .9s step-end infinite;
     }
-    .featured-badge {
-      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-      background: linear-gradient(135deg, #3b82f6, #06b6d4);
-      color: #fff; font-size: 0.72rem; font-weight: 700;
-      padding: 0.3rem 1rem; border-radius: 100px;
-      text-transform: uppercase; letter-spacing: 0.08em;
+    @keyframes cursor-blink{0%,100%{opacity:1}50%{opacity:0}}
+    .term-divider{border:none;border-top:1px solid var(--b1);margin:.5rem 0}
+    .hero-terminal-glow{
+      position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);
+      width:200px;height:60px;
+      background:radial-gradient(circle,rgba(255,77,0,.2) 0%,transparent 70%);
+      filter:blur(20px);
     }
-    .pricing-card h3 { font-size: 1rem; font-weight: 700; color: var(--muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; }
-    .price { font-size: 2.5rem; font-weight: 800; color: var(--white); line-height: 1; }
-    .price-period { font-size: 0.9rem; color: var(--muted); font-weight: 400; }
-    .price-note { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; margin-bottom: 1.5rem; }
-    .pricing-features { list-style: none; margin-bottom: 2rem; }
-    .pricing-features li {
-      display: flex; align-items: flex-start; gap: 0.6rem;
-      font-size: 0.88rem; color: var(--text);
-      padding: 0.45rem 0; border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .pricing-features li:last-child { border-bottom: none; }
-    .pricing-features .ck { color: #22c55e; flex-shrink: 0; margin-top: 1px; }
-    .btn-plan {
-      display: block; width: 100%; text-align: center;
-      padding: 0.8rem; border-radius: 10px; text-decoration: none;
-      font-size: 0.95rem; font-weight: 700; transition: all 0.2s;
-    }
-    .btn-plan-accent { background: var(--accent); color: #fff; }
-    .btn-plan-accent:hover { background: #2563eb; }
-    .btn-plan-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-    .btn-plan-outline:hover { border-color: var(--accent); background: rgba(59,130,246,0.06); }
 
-    /* ── CTA ── */
-    .cta-section {
-      text-align: center;
-      background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(59,130,246,0.1) 0%, transparent 70%);
-      padding: 7rem 1.5rem;
+    /* ─────────────────────────────
+       BENTO SECTION
+    ───────────────────────────── */
+    .bento-section{padding:6rem 1.5rem;background:var(--s1)}
+    .bento-grid{
+      display:grid;
+      grid-template-columns:repeat(12,1fr);
+      grid-template-rows:auto;
+      gap:1rem;margin-top:3rem;
     }
-    .cta-section h2 { margin-bottom: 1rem; }
-    .cta-section p { color: var(--muted); max-width: 500px; margin: 0 auto 2.5rem; font-size: 1.05rem; line-height: 1.7; }
-    .cta-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .bento-card{
+      background:var(--s2);border:1px solid var(--b1);border-radius:16px;padding:1.75rem;
+      transition:border-color .2s,box-shadow .2s;overflow:hidden;position:relative;
+    }
+    .bento-card:hover{border-color:var(--b2);box-shadow:0 8px 40px rgba(0,0,0,.5)}
+    .bc-span4{grid-column:span 4}
+    .bc-span5{grid-column:span 5}
+    .bc-span6{grid-column:span 6}
+    .bc-span7{grid-column:span 7}
+    .bc-span8{grid-column:span 8}
+    .bc-span12{grid-column:span 12}
+    .bento-card h3{font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:.4rem}
+    .bento-card p{font-size:.84rem;color:var(--t2);line-height:1.65}
+    .bento-icon{font-size:1.8rem;margin-bottom:.85rem}
+    .bento-big-num{
+      font-size:3.5rem;font-weight:800;color:var(--white);letter-spacing:-2px;
+      font-family:var(--mono);line-height:1;margin-bottom:.4rem;
+    }
+    .bento-big-num span{font-size:1.5rem;color:var(--orange)}
+    .bento-layer-stack{margin-top:1rem;display:flex;flex-direction:column;gap:.4rem}
+    .bento-layer{
+      padding:.5rem .85rem;border-radius:8px;font-size:.75rem;font-weight:600;font-family:var(--mono);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .bl-1{background:rgba(255,77,0,.08);color:#ff9966;border:1px solid rgba(255,77,0,.15)}
+    .bl-2{background:rgba(0,212,255,.07);color:var(--cyan);border:1px solid rgba(0,212,255,.15)}
+    .bl-3{background:rgba(139,92,246,.07);color:#c4b5fd;border:1px solid rgba(139,92,246,.15)}
+    .bl-4{background:rgba(34,197,94,.07);color:var(--green);border:1px solid rgba(34,197,94,.15)}
+    .bento-card.orange-glow::after{
+      content:'';position:absolute;top:-60px;right:-60px;
+      width:180px;height:180px;border-radius:50%;
+      background:radial-gradient(circle,rgba(255,77,0,.1) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .bento-card.cyan-glow::after{
+      content:'';position:absolute;top:-60px;right:-60px;
+      width:180px;height:180px;border-radius:50%;
+      background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .pkg-snip{
+      background:rgba(0,0,0,.4);border:1px solid var(--b2);border-radius:8px;
+      padding:.85rem;margin-top:.85rem;font-family:var(--mono);font-size:.75rem;line-height:1.7;
+    }
+    .pk{color:var(--t2)}
+    .pv{color:var(--green)}
+    .ps{color:var(--cyan)}
+
+    /* ─────────────────────────────
+       SECTION DIVIDER
+    ───────────────────────────── */
+    .divider{
+      height:1px;background:linear-gradient(90deg,transparent,var(--b2),transparent);
+      margin:0;
+    }
+
+    /* ─────────────────────────────
+       AGENT MARKETPLACE
+    ───────────────────────────── */
+    .marketplace-section{padding:6rem 1.5rem}
+    .sec-header{
+      display:flex;align-items:flex-end;justify-content:space-between;
+      flex-wrap:wrap;gap:1rem;margin-bottom:3rem;
+    }
+    .filter-row{display:flex;gap:.4rem;flex-wrap:wrap}
+    .filter-btn{
+      padding:.35rem .85rem;background:transparent;border:1px solid var(--b1);
+      border-radius:100px;font-size:.75rem;font-weight:600;color:var(--t2);
+      cursor:pointer;transition:all .15s;font-family:var(--font);
+    }
+    .filter-btn:hover,.filter-btn.active{border-color:var(--orange);color:var(--orange);background:rgba(255,77,0,.08)}
+    .agents-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1rem}
+    .agent-card{
+      background:var(--s2);border:1px solid var(--b1);border-radius:14px;padding:1.5rem;
+      display:flex;flex-direction:column;gap:.85rem;
+      transition:border-color .2s,transform .15s,box-shadow .2s;position:relative;
+    }
+    .agent-card:hover{border-color:var(--b2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+    .agent-card.featured-agent{
+      background:linear-gradient(var(--s2),var(--s2)) padding-box,
+                 linear-gradient(135deg,rgba(255,77,0,.45),rgba(0,212,255,.35)) border-box;
+      border:1px solid transparent;
+    }
+    .agent-card.featured-agent:hover{box-shadow:0 12px 40px rgba(255,77,0,.12)}
+    .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+    .agent-icon{
+      width:42px;height:42px;border-radius:11px;
+      display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;
+    }
+    .card-badges{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:flex-end}
+    .agent-name{font-size:.95rem;font-weight:700;color:var(--white)}
+    .agent-by{font-size:.7rem;color:var(--t3);margin-top:.1rem;font-family:var(--mono)}
+    .agent-desc{font-size:.82rem;color:var(--t2);line-height:1.65;flex:1}
+    .agent-tags{display:flex;flex-wrap:wrap;gap:.3rem}
+    .atag{font-size:.65rem;color:var(--t3);padding:.15rem .45rem;background:rgba(255,255,255,.03);border:1px solid var(--b1);border-radius:4px}
+    .agent-cmd{
+      display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+      padding:.5rem .85rem;background:rgba(0,0,0,.5);border:1px solid var(--b2);
+      border-radius:8px;font-family:var(--mono);font-size:.75rem;color:var(--cyan);
+    }
+    .copy-btn{
+      font-size:.62rem;color:var(--t3);cursor:pointer;padding:.18rem .4rem;
+      background:rgba(255,255,255,.04);border:1px solid var(--b1);border-radius:4px;
+      transition:all .15s;white-space:nowrap;font-family:var(--font);
+    }
+    .copy-btn:hover{color:var(--text);background:rgba(255,255,255,.08)}
+    .marketplace-footer{text-align:center;margin-top:2.5rem;padding-top:2.5rem;border-top:1px solid var(--b1)}
+    .marketplace-footer p{color:var(--t2);font-size:.88rem;margin-bottom:1.1rem}
+
+    /* ─────────────────────────────
+       SOFTWARE MARKETPLACE
+    ───────────────────────────── */
+    .software-section{padding:6rem 1.5rem;background:var(--s1)}
+    .software-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1rem}
+    .sw-card{
+      background:var(--s2);border:1px solid var(--b1);border-radius:16px;padding:1.85rem;
+      display:flex;flex-direction:column;position:relative;overflow:hidden;
+      transition:border-color .2s,transform .15s;
+    }
+    .sw-card:hover{border-color:var(--b2);transform:translateY(-3px)}
+    .sw-card.flagship{
+      background:linear-gradient(var(--s2),var(--s2)) padding-box,
+                 linear-gradient(135deg,rgba(255,77,0,.5),rgba(0,212,255,.35)) border-box;
+      border:1px solid transparent;
+    }
+    .sw-card.flagship:hover{box-shadow:0 12px 50px rgba(255,77,0,.1)}
+    .sw-glow{position:absolute;top:-80px;right:-80px;width:220px;height:220px;border-radius:50%;pointer-events:none}
+    .sw-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem}
+    .sw-icon{font-size:2rem}
+    .sw-badges{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:flex-end}
+    .sw-name{font-size:1.15rem;font-weight:800;color:var(--white);margin-bottom:.25rem}
+    .sw-by{font-size:.7rem;color:var(--t3);margin-bottom:.6rem;font-family:var(--mono)}
+    .sw-tagline{font-size:.84rem;color:var(--t2);line-height:1.6;margin-bottom:.85rem}
+    .sw-agents{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.85rem}
+    .sw-agent-tag{font-size:.65rem;color:var(--t3);padding:.18rem .5rem;background:rgba(255,255,255,.03);border:1px solid var(--b1);border-radius:5px}
+    .sw-features{list-style:none;margin-bottom:1.1rem;flex:1}
+    .sw-features li{display:flex;align-items:flex-start;gap:.5rem;font-size:.82rem;color:var(--text);padding:.32rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    .sw-features li:last-child{border-bottom:none}
+    .ck{color:var(--green);flex-shrink:0;font-size:.8rem;margin-top:1px}
+    .sw-price{display:flex;align-items:baseline;gap:.3rem;margin-bottom:.85rem}
+    .sw-price .amt{font-size:1.75rem;font-weight:800;color:var(--white);font-family:var(--mono)}
+    .sw-price .per{font-size:.78rem;color:var(--t2)}
+    .sw-cta{display:block;width:100%;text-align:center;padding:.72rem;border-radius:9px;font-size:.88rem;font-weight:700;text-decoration:none;transition:all .2s;font-family:var(--font)}
+    .sw-cta-orange{background:var(--orange);color:#fff}
+    .sw-cta-orange:hover{background:var(--orange2)}
+    .sw-cta-ghost{background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--b2)}
+    .sw-cta-ghost:hover{border-color:var(--b3);background:rgba(255,255,255,.08)}
+    .sw-cta-coming{background:rgba(255,255,255,.03);color:var(--t3);border:1px dashed var(--b1);cursor:not-allowed}
+    .list-cta-box{
+      margin-top:2rem;padding:1.75rem;background:rgba(255,77,0,.04);
+      border:1px dashed rgba(255,77,0,.2);border-radius:14px;text-align:center;
+    }
+    .list-cta-box h3{font-size:1rem;font-weight:700;margin-bottom:.4rem}
+    .list-cta-box p{color:var(--t2);font-size:.84rem;max-width:460px;margin:0 auto .85rem;line-height:1.65}
+
+    /* ─────────────────────────────
+       RESEARCH
+    ───────────────────────────── */
+    .research-section{padding:6rem 1.5rem}
+    .research-layout{display:grid;grid-template-columns:1fr 300px;gap:2.5rem;margin-top:3rem}
+    .research-feed{display:flex;flex-direction:column;gap:1rem}
+    .r-card-hero{
+      background:var(--s2);border:1px solid var(--b1);border-radius:16px;padding:2rem;
+      transition:border-color .2s;position:relative;
+    }
+    .r-card-hero:hover{border-color:var(--b2)}
+    .r-card-hero.breakthrough{
+      background:linear-gradient(var(--s2),var(--s2)) padding-box,
+                 linear-gradient(135deg,rgba(0,212,255,.35),rgba(139,92,246,.3)) border-box;
+      border:1px solid transparent;
+    }
+    .r-card{
+      background:var(--s2);border:1px solid var(--b1);border-radius:14px;
+      padding:1.25rem 1.5rem;display:grid;grid-template-columns:52px 1fr;gap:1rem;
+      align-items:start;transition:border-color .2s,transform .15s;position:relative;
+    }
+    .r-card:hover{border-color:var(--b2);transform:translateX(3px)}
+    .r-card.sponsored{border-color:rgba(139,92,246,.2)}
+    .r-thumb{
+      width:52px;height:52px;border-radius:10px;
+      display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;
+    }
+    .r-meta{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem}
+    .r-date{font-size:.68rem;color:var(--t3);font-family:var(--mono)}
+    .r-card h3{font-size:.92rem;font-weight:700;color:var(--white);margin-bottom:.35rem;line-height:1.35}
+    .r-card-hero h3{font-size:1.15rem;font-weight:800;color:var(--white);margin-bottom:.5rem;line-height:1.3}
+    .r-card p,.r-card-hero p{font-size:.82rem;color:var(--t2);line-height:1.65;margin-bottom:.75rem}
+    .r-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+    .r-tags{display:flex;gap:.3rem;flex-wrap:wrap}
+    .r-tag{font-size:.64rem;color:var(--t3);padding:.15rem .45rem;background:rgba(255,255,255,.03);border:1px solid var(--b1);border-radius:4px}
+    .r-link{font-size:.76rem;color:var(--orange);text-decoration:none;font-weight:600;white-space:nowrap}
+    .r-link:hover{text-decoration:underline}
+    .sponsored-flag{position:absolute;top:.85rem;right:.85rem;font-size:.58rem;font-weight:700;letter-spacing:.06em;color:#c4b5fd;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.2);padding:.15rem .4rem;border-radius:4px;text-transform:uppercase;font-family:var(--mono)}
+    .r-sidebar{display:flex;flex-direction:column;gap:1rem}
+    .sidebar-box{background:var(--s2);border:1px solid var(--b1);border-radius:14px;padding:1.25rem}
+    .sidebar-box h4{font-size:.8rem;font-weight:700;color:var(--white);margin-bottom:.85rem}
+    .nl-form{display:flex;flex-direction:column;gap:.5rem}
+    .nl-input{
+      padding:.6rem .85rem;background:rgba(0,0,0,.4);border:1px solid var(--b2);
+      border-radius:8px;color:var(--text);font-size:.82rem;outline:none;width:100%;font-family:var(--font);
+    }
+    .nl-input::placeholder{color:var(--t3)}
+    .nl-input:focus{border-color:var(--orange)}
+    .nl-btn{
+      padding:.6rem;background:var(--orange);color:#fff;border:none;border-radius:8px;
+      font-size:.82rem;font-weight:700;cursor:pointer;transition:background .2s;font-family:var(--font);
+    }
+    .nl-btn:hover{background:var(--orange2)}
+    .trending-item{padding:.65rem 0;border-bottom:1px solid var(--b1);display:flex;gap:.65rem;align-items:flex-start}
+    .trending-item:last-child{border-bottom:none;padding-bottom:0}
+    .t-num{font-size:.7rem;font-weight:800;color:var(--t3);flex-shrink:0;margin-top:2px;font-family:var(--mono)}
+    .t-title{font-size:.78rem;color:var(--text);line-height:1.4}
+    .t-views{font-size:.66rem;color:var(--t3);font-family:var(--mono)}
+    .topic-grid{display:flex;flex-wrap:wrap;gap:.4rem}
+    .topic-tag{
+      padding:.28rem .6rem;background:rgba(255,255,255,.03);border:1px solid var(--b1);
+      border-radius:6px;font-size:.72rem;color:var(--t2);cursor:pointer;transition:all .15s;
+    }
+    .topic-tag:hover{border-color:var(--orange);color:var(--orange);background:rgba(255,77,0,.06)}
+    .sidebar-sponsor{
+      background:linear-gradient(var(--s2),var(--s2)) padding-box,
+                 linear-gradient(135deg,rgba(245,158,11,.4),rgba(255,77,0,.3)) border-box;
+      border:1px solid transparent;
+    }
+    .sidebar-sponsor h4{color:var(--gold)}
+    .r-more{text-align:center;margin-top:2rem}
+
+    /* ─────────────────────────────
+       DATASET STORE
+    ───────────────────────────── */
+    .data-section{padding:6rem 1.5rem;background:var(--s1)}
+    .data-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1rem;margin-top:3rem}
+    .d-card{
+      background:var(--s2);border:1px solid var(--b1);border-radius:16px;padding:1.85rem;
+      display:flex;flex-direction:column;gap:.85rem;position:relative;overflow:hidden;
+      transition:border-color .2s,transform .15s;
+    }
+    .d-card:hover{border-color:var(--b2);transform:translateY(-3px)}
+    .d-card.d-featured{
+      background:linear-gradient(var(--s2),var(--s2)) padding-box,
+                 linear-gradient(135deg,rgba(34,197,94,.4),rgba(0,212,255,.3)) border-box;
+      border:1px solid transparent;
+    }
+    .d-card.d-featured:hover{box-shadow:0 12px 50px rgba(34,197,94,.08)}
+    .d-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+    .d-icon{font-size:2rem}
+    .d-name{font-size:1.05rem;font-weight:800;color:var(--white)}
+    .d-version{font-size:.68rem;color:var(--t3);font-family:var(--mono);margin-top:.15rem}
+    .d-desc{font-size:.82rem;color:var(--t2);line-height:1.65}
+    .d-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+    .d-stat{background:rgba(0,0,0,.3);border:1px solid var(--b1);border-radius:8px;padding:.55rem;text-align:center}
+    .d-stat strong{display:block;font-size:.9rem;font-weight:800;color:var(--white);font-family:var(--mono)}
+    .d-stat span{font-size:.6rem;color:var(--t3);text-transform:uppercase;letter-spacing:.06em}
+    .d-formats{display:flex;gap:.35rem;flex-wrap:wrap}
+    .d-fmt{font-size:.65rem;color:var(--t3);padding:.15rem .45rem;background:rgba(0,0,0,.3);border:1px solid var(--b1);border-radius:4px;font-family:var(--mono)}
+    .d-use{font-size:.76rem;color:var(--t3);line-height:1.55;padding:.65rem .75rem;background:rgba(0,0,0,.25);border-radius:8px;border-left:2px solid var(--orange)}
+    .d-price-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:auto;padding-top:.5rem}
+    .d-price .amt{font-size:1.5rem;font-weight:800;color:var(--white);font-family:var(--mono)}
+    .d-price .per{font-size:.72rem;color:var(--t2)}
+    .d-price .orig{font-size:.72rem;color:var(--t3);text-decoration:line-through}
+    .btn-data{padding:.6rem 1.2rem;border-radius:8px;font-size:.8rem;font-weight:700;text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font)}
+    .btn-data-green{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+    .btn-data-green:hover{background:rgba(34,197,94,.18)}
+    .btn-data-orange{background:var(--orange);color:#fff}
+    .btn-data-orange:hover{background:var(--orange2)}
+    .data-list-cta{
+      margin-top:2rem;padding:1.75rem;background:rgba(34,197,94,.04);
+      border:1px dashed rgba(34,197,94,.2);border-radius:14px;text-align:center;
+    }
+    .data-list-cta h3{font-size:1rem;font-weight:700;margin-bottom:.4rem}
+    .data-list-cta p{color:var(--t2);font-size:.84rem;max-width:480px;margin:0 auto .85rem;line-height:1.65}
+
+    /* ─────────────────────────────
+       SPONSORS
+    ───────────────────────────── */
+    .sponsor-section{padding:6rem 1.5rem}
+    .sponsor-tiers{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin-top:3rem}
+    .tier-card{background:var(--s2);border:1px solid var(--b1);border-radius:16px;padding:2rem;transition:border-color .2s}
+    .tier-card:hover{border-color:var(--b2)}
+    .tier-card.tier-gold{
+      background:linear-gradient(var(--s2),var(--s2)) padding-box,
+                 linear-gradient(135deg,rgba(245,158,11,.4),rgba(255,77,0,.3)) border-box;
+      border:1px solid transparent;
+    }
+    .tier-card.tier-platinum{
+      background:linear-gradient(var(--s2),var(--s2)) padding-box,
+                 linear-gradient(135deg,rgba(139,92,246,.5),rgba(0,212,255,.35)) border-box;
+      border:1px solid transparent;
+    }
+    .tier-crown{font-size:1.7rem;margin-bottom:.65rem}
+    .tier-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t3);font-family:var(--mono);margin-bottom:.3rem}
+    .tier-price{font-size:1.85rem;font-weight:800;color:var(--white);font-family:var(--mono);margin-bottom:.2rem}
+    .tier-price span{font-size:.82rem;color:var(--t2);font-weight:400;font-family:var(--font)}
+    .tier-desc{font-size:.82rem;color:var(--t2);line-height:1.6;margin-bottom:1.1rem}
+    .tier-perks{list-style:none;margin-bottom:1.4rem}
+    .tier-perks li{display:flex;align-items:flex-start;gap:.5rem;font-size:.82rem;color:var(--text);padding:.35rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    .tier-perks li:last-child{border-bottom:none}
+    .sponsor-slots{margin-top:3.5rem}
+    .sponsor-slots h3{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);text-align:center;margin-bottom:1.25rem;font-family:var(--mono)}
+    .slots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem}
+    .slot{
+      background:var(--s2);border:1px dashed var(--b1);border-radius:12px;
+      padding:1.25rem;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      min-height:80px;text-align:center;transition:border-color .15s;
+    }
+    .slot:hover{border-color:var(--orange);border-style:solid}
+    .slot p{font-size:.72rem;color:var(--t3);line-height:1.4}
+
+    /* ─────────────────────────────
+       CTA
+    ───────────────────────────── */
+    .cta-section{
+      padding:8rem 1.5rem;text-align:center;
+      background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(255,77,0,.06) 0%,transparent 70%);
+    }
+    .cta-section h2{max-width:680px;margin:0 auto 1rem}
+    .cta-section p{color:var(--t2);max-width:500px;margin:0 auto 2.5rem;font-size:1.05rem;line-height:1.75}
+    .cta-actions{display:flex;gap:.85rem;flex-wrap:wrap;justify-content:center}
+    .cta-note{margin-top:1.25rem;font-size:.76rem;color:var(--t3);font-family:var(--mono)}
 
     /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border); padding: 2.5rem 1.5rem;
-      text-align: center; color: var(--muted); font-size: 0.85rem;
-    }
-    footer a { color: var(--accent); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+    footer{border-top:1px solid var(--b1);padding:3rem 1.5rem;position:relative;z-index:1}
+    .footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:3rem}
+    .footer-brand{font-size:1.3rem;font-weight:800;color:var(--white);letter-spacing:-1px;margin-bottom:.4rem}
+    .footer-brand-dot{color:var(--orange)}
+    .footer-tagline{font-size:.78rem;color:var(--t3);line-height:1.5;font-family:var(--mono)}
+    .footer-col h4{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:.9rem;font-family:var(--mono)}
+    .footer-col a{display:block;font-size:.82rem;color:var(--t2);text-decoration:none;margin-bottom:.5rem;transition:color .15s}
+    .footer-col a:hover{color:var(--text)}
+    .footer-bottom{max-width:1200px;margin:2rem auto 0;padding-top:1.5rem;border-top:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.85rem}
+    .footer-bottom p{font-size:.76rem;color:var(--t3);font-family:var(--mono)}
+    .footer-bottom a{color:var(--orange);text-decoration:none}
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .privacy-block { grid-template-columns: 1fr; gap: 2.5rem; }
-      nav { padding: 1rem; }
-      .hero-proof { gap: 1.5rem; }
+    @media(max-width:1024px){
+      .hero{grid-template-columns:1fr;max-width:700px}
+      .hero-terminal{display:none}
+      .bento-grid .bc-span4,.bento-grid .bc-span5,.bento-grid .bc-span6,.bento-grid .bc-span7,.bento-grid .bc-span8{grid-column:span 6}
+      .research-layout{grid-template-columns:1fr}
+      .r-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+      .footer-inner{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:768px){
+      .nav-links{display:none}
+      .bento-grid .bc-span4,.bento-grid .bc-span5,.bento-grid .bc-span6,.bento-grid .bc-span7,.bento-grid .bc-span8{grid-column:span 12}
+      .sec-header{flex-direction:column;align-items:flex-start}
+      .r-sidebar{grid-template-columns:1fr}
+      .footer-inner{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:520px){
+      .footer-inner{grid-template-columns:1fr}
+      .d-stats{grid-template-columns:1fr 1fr}
+      .cta-actions{flex-direction:column;align-items:center}
     }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
+<!-- ── LIVE TICKER ── -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="ticker-dot"></span>Ollama 0.24.0 — Flash Attention + 30% MoE throughput</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>SovereignCore Economy Dataset — 55M+ transactions now available</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Hermes Agent updated — best-in-class local function calling</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Aethyro CPA — 3 demo requests today</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>RTX 5050 Blackwell — MXFP4 support confirmed 25% faster prompts</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>115,813 training pairs — Sovereign Agent dataset available</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Droid by Factory — cross-session memory, terminal + IDE</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Ollama 0.24.0 — Flash Attention + 30% MoE throughput</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>SovereignCore Economy Dataset — 55M+ transactions now available</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Hermes Agent updated — best-in-class local function calling</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Aethyro CPA — 3 demo requests today</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>RTX 5050 Blackwell — MXFP4 support confirmed 25% faster prompts</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>115,813 training pairs — Sovereign Agent dataset available</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Droid by Factory — cross-session memory, terminal + IDE</span>
+  </div>
+</div>
+
+<!-- ── NAV ── -->
 <nav>
-  <div class="nav-logo">Aethyro</div>
-  <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Sales%20Inquiry&body=Hi%2C%20I%27m%20interested%20in%20Aethyro%20for%20my%20firm.%20Here%27s%20a%20bit%20about%20our%20situation%3A" class="nav-cta">Contact Sales →</a>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <span class="nav-logo-dot"></span>
+      Aethyro
+    </a>
+    <div class="nav-links">
+      <a href="#agents"   class="nav-link">Agents</a>
+      <a href="#software" class="nav-link">Software</a>
+      <a href="#research" class="nav-link">Research</a>
+      <a href="#data"     class="nav-link">Datasets</a>
+      <a href="#sponsors" class="nav-link">Sponsors</a>
+    </div>
+    <div class="nav-right">
+      <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Early%20Access" class="btn-nav btn-nav-orange">Get Early Access →</a>
+    </div>
+  </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-badge"><span></span> Built for CPA &amp; Accounting Firms</div>
-  <h1>Your firm's AI that<br/><em>never leaves your office.</em></h1>
-  <p class="hero-sub">
-    Private, local AI that handles tax research, compliance drafting, and client work —
-    without sending a single client file to the cloud.
-    Runs on your hardware. Controlled by you.
-  </p>
-  <div class="hero-actions">
-    <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Sales%20Inquiry&body=Hi%2C%20I%27m%20interested%20in%20Aethyro%20for%20my%20firm.%20Here%27s%20a%20bit%20about%20our%20situation%3A" class="btn-primary">
-      Contact Sales →
-    </a>
-    <a href="#how-it-works" class="btn-secondary">See How It Works</a>
-  </div>
-  <div class="hero-proof">
-    <div class="proof-stat"><strong>100%</strong><span>Private — no cloud</span></div>
-    <div class="proof-stat"><strong>&lt;10s</strong><span>Response time</span></div>
-    <div class="proof-stat"><strong>$0</strong><span>API costs</span></div>
-    <div class="proof-stat"><strong>SOC2</strong><span>Audit ready</span></div>
-  </div>
-</section>
+<!-- ── HERO ── -->
+<div style="background:var(--bg);overflow:hidden">
+<div class="hero">
+  <!-- Animated orbs -->
+  <div class="hero-orb orb-orange"></div>
+  <div class="hero-orb orb-cyan"></div>
+  <div class="hero-orb orb-violet"></div>
 
-<!-- PROBLEM -->
-<section class="problem-section">
-  <div class="container">
-    <span class="section-label">The Problem</span>
-    <h2>Cloud AI puts your clients at risk.<br/>And regulators are watching.</h2>
-    <p class="section-intro">
-      ChatGPT, Copilot, and every cloud AI tool you're considering routes your client data
-      through servers you don't control. That's a liability your firm can't afford.
+  <!-- Left col -->
+  <div class="hero-left">
+    <div class="hero-status">
+      <span class="b-live" style="background:none;border:none;padding:0;font-family:var(--mono);font-size:.72rem">SYSTEM ONLINE</span>
+      &nbsp;·&nbsp; GPU ✓ &nbsp;·&nbsp; 8 AGENTS ACTIVE
+    </div>
+    <h1>
+      The Platform<br/>
+      for <span class="grad-mix">Agentic&nbsp;AI.</span>
+    </h1>
+    <p class="hero-sub">
+      Browse agents. Buy software. Read breakthroughs. Purchase training data.
+      Everything the AI ecosystem needs — 100% local, zero data egress.
     </p>
-    <div class="problem-grid">
-      <div class="problem-card">
-        <div class="problem-icon">⚖️</div>
-        <h3>Confidentiality risk</h3>
-        <p>IRS Circular 230 and state CPA rules require reasonable safeguards on client data. Cloud AI tools create disclosure risk that's hard to document or defend.</p>
+    <div class="hero-actions">
+      <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Early%20Access" class="btn btn-lg btn-orange">Get Early Access →</a>
+      <a href="#agents" class="btn btn-lg btn-ghost">Browse Marketplace</a>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-stat"><strong>8<span style="color:var(--orange);font-size:1rem">+</span></strong><span>Live Agents</span></div>
+      <div class="meta-stat"><strong>4</strong><span>Products</span></div>
+      <div class="meta-stat"><strong>55M<span style="color:var(--orange);font-size:1rem">+</span></strong><span>Dataset rows</span></div>
+      <div class="meta-stat"><strong>$0</strong><span>API costs</span></div>
+    </div>
+  </div>
+
+  <!-- Terminal card -->
+  <div class="hero-terminal">
+    <div class="term-bar">
+      <div class="term-dot" style="background:#ff5f57"></div>
+      <div class="term-dot" style="background:#febc2e"></div>
+      <div class="term-dot" style="background:#28c840"></div>
+      <span class="term-title">aethyro — system status</span>
+    </div>
+    <div class="term-body">
+      <div><span class="t-prompt">→ </span><span class="t-cmd">aethyro status --verbose</span></div>
+      <hr class="term-divider"/>
+      <div><span class="t-key">runtime      </span><span class="t-val">ollama@0.24.0</span></div>
+      <div><span class="t-key">gpu          </span><span class="t-val">RTX 5050 ✓ CUDA 12.0</span></div>
+      <div><span class="t-key">vram         </span><span class="t-val">8.0 GiB / 4.3 free</span></div>
+      <div><span class="t-key">inference    </span><span class="t-val">17 tok/s</span></div>
+      <div><span class="t-key">flash_attn   </span><span class="t-val">enabled</span></div>
+      <div><span class="t-key">data_egress  </span><span class="t-val" style="color:var(--green)">0 bytes</span></div>
+      <hr class="term-divider"/>
+      <div><span class="t-key">agents       </span><span class="t-val">8 registered</span></div>
+      <div><span class="t-key">avery        </span><span class="t-val">loaded (q4_k_m)</span></div>
+      <div><span class="t-key">forge        </span><span class="t-val">standby</span></div>
+      <div><span class="t-key">oracle       </span><span class="t-val">standby</span></div>
+      <hr class="term-divider"/>
+      <div><span class="t-key">datasets     </span><span class="t-val">3 available</span></div>
+      <div><span class="t-key">transactions </span><span class="t-val">55,412,871</span></div>
+      <div><span class="t-key">train_pairs  </span><span class="t-val">115,813</span></div>
+      <hr class="term-divider"/>
+      <div><span class="t-prompt">→ </span><span class="t-cmd">aethyro import hermes</span><span class="t-cursor"></span></div>
+    </div>
+    <div class="hero-terminal-glow"></div>
+  </div>
+</div>
+</div>
+
+<!-- ── BENTO / WHAT IS AETHYRO ── -->
+<section class="bento-section" id="what">
+  <div class="container">
+    <span class="sec-eyebrow">What Is Aethyro</span>
+    <h2>One platform.<br/><span class="grad-orange">Every layer.</span></h2>
+    <div class="bento-grid">
+
+      <div class="bento-card bc-span7 orange-glow">
+        <div class="bento-icon">🖥️</div>
+        <h3>The OS for Agentic AI</h3>
+        <p>Aethyro is the runtime layer beneath your AI workflows — managing agent discovery, import/export, memory, routing, and deployment. Like a smartphone OS: the apps are what you see, Aethyro is what makes them run and connect.</p>
+        <div class="bento-layer-stack">
+          <div class="bento-layer bl-1">Your Products &amp; Workflows<span style="font-size:.62rem;opacity:.6">LAYER 4</span></div>
+          <div class="bento-layer bl-2">Agent Marketplace (8+ agents)<span style="font-size:.62rem;opacity:.6">LAYER 3</span></div>
+          <div class="bento-layer bl-3">Aethyro OS Runtime<span style="font-size:.62rem;opacity:.6">LAYER 2</span></div>
+          <div class="bento-layer bl-4">Local Ollama + Model Layer<span style="font-size:.62rem;opacity:.6">LAYER 1</span></div>
+        </div>
       </div>
-      <div class="problem-card">
-        <div class="problem-icon">💸</div>
-        <h3>Ongoing API costs</h3>
-        <p>Cloud AI pricing scales with usage. Busy season means bigger bills — just when margins are already tightest.</p>
+
+      <div class="bento-card bc-span5 cyan-glow">
+        <div class="bento-icon">📦</div>
+        <h3>Portable Agent Bundles</h3>
+        <p>Every agent packages into a signed .aethyro file — model, memory, skills, config. Deploy to a client machine with one command. Your agents travel with you.</p>
+        <div class="pkg-snip">
+          <div><span class="pk">"agent_id": </span><span class="pv">"aethyro-cpa-v2"</span></div>
+          <div><span class="pk">"model":    </span><span class="ps">"hermes-3:8b-q4"</span></div>
+          <div><span class="pk">"skills":   </span><span class="ps">["tax","compliance"]</span></div>
+          <div><span class="pk">"signed":   </span><span class="pv">"aethyro-v1"</span></div>
+        </div>
       </div>
-      <div class="problem-card">
-        <div class="problem-icon">🔒</div>
-        <h3>No audit trail</h3>
-        <p>When a cloud provider gets breached — and they do — you have no record of what client data was exposed or when.</p>
+
+      <div class="bento-card bc-span4">
+        <div class="bento-big-num">$0<span>/query</span></div>
+        <h3>Zero API Costs</h3>
+        <p>Flat monthly. Unlimited inference. No busy-season spikes.</p>
       </div>
-      <div class="problem-card">
-        <div class="problem-icon">🌐</div>
-        <h3>Internet dependency</h3>
-        <p>Your workflow stops when their servers go down. Filing deadlines don't care about cloud outages.</p>
+
+      <div class="bento-card bc-span4">
+        <div class="bento-big-num">100<span>%</span></div>
+        <h3>Data Stays Local</h3>
+        <p>Every inference, memory write, and tool call runs on your hardware.</p>
       </div>
+
+      <div class="bento-card bc-span4">
+        <div class="bento-big-num">17<span> t/s</span></div>
+        <h3>GPU-Accelerated</h3>
+        <p>CUDA flash attention, KV cache optimized, Blackwell MXFP4 ready.</p>
+      </div>
+
+      <div class="bento-card bc-span12" style="background:linear-gradient(var(--s2),var(--s2)) padding-box,linear-gradient(90deg,rgba(255,77,0,.3),rgba(0,212,255,.25)) border-box;border:1px solid transparent;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:2rem;align-items:center">
+          <div><span class="sec-eyebrow" style="margin-bottom:.5rem">Import</span><h3 style="font-size:1rem">Install any agent in one command</h3><p style="font-size:.8rem;color:var(--t2)">Pull model weights, system prompt, skills, and config — wired and ready in &lt;5 minutes.</p></div>
+          <div><span class="sec-eyebrow" style="margin-bottom:.5rem">Customize</span><h3 style="font-size:1rem">Train on your data and domain</h3><p style="font-size:.8rem;color:var(--t2)">Feed documents, adjust persona, add skills. Agents improve with every session.</p></div>
+          <div><span class="sec-eyebrow" style="margin-bottom:.5rem">Orchestrate</span><h3 style="font-size:1rem">Route tasks across agents automatically</h3><p style="font-size:.8rem;color:var(--t2)">Intent engine routes coding → Droid, research → Hermes, personal → OpenClaw.</p></div>
+          <div><span class="sec-eyebrow" style="margin-bottom:.5rem">Export</span><h3 style="font-size:1rem">Package and deploy anywhere</h3><p style="font-size:.8rem;color:var(--t2)">Signed .aethyro bundle runs identically on any Aethyro instance worldwide.</p></div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
-<!-- SOLUTION -->
-<section id="how-it-works">
-  <div class="container">
-    <span class="section-label">The Solution</span>
-    <h2>Aethyro runs on your hardware.<br/>Your data never leaves.</h2>
-    <p class="section-intro">
-      We install a purpose-built AI system directly on your firm's machine.
-      No subscriptions. No per-query fees. No data leaving the building.
-    </p>
-    <div class="solution-grid">
-      <div class="solution-card">
-        <div class="solution-number">Step 01</div>
-        <h3>We install on-site</h3>
-        <p>One setup session — typically under 2 hours — and Aethyro is running on your existing hardware. No new servers required, no cloud accounts.</p>
-      </div>
-      <div class="solution-card">
-        <div class="solution-number">Step 02</div>
-        <h3>Your team asks questions</h3>
-        <p>Tax code lookups, client memo drafts, engagement letter generation, IRS correspondence — just type the question into your firm's private AI assistant.</p>
-      </div>
-      <div class="solution-card">
-        <div class="solution-number">Step 03</div>
-        <h3>Answers stay in-house</h3>
-        <p>Every query and response lives on your hardware. You own the data. Your clients are protected. Your firm is defensible.</p>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="divider"></div>
 
-<!-- PRIVACY -->
-<section class="privacy-section">
+<!-- ── AGENT MARKETPLACE ── -->
+<section class="marketplace-section" id="agents">
   <div class="container">
-    <span class="section-label">Privacy &amp; Security</span>
-    <h2>What "private AI" actually means.</h2>
-    <div class="privacy-block">
+    <div class="sec-header">
       <div>
-        <p class="section-intro">Every other AI tool routes your data somewhere else. Aethyro is the only accounting AI that's physically incapable of leaking client data — because it never connects to the internet to process queries.</p>
-        <ul class="privacy-list">
-          <li><span class="check">✓</span><span>Zero client data transmitted to any external server</span></li>
-          <li><span class="check">✓</span><span>Full local inference — works without internet</span></li>
-          <li><span class="check">✓</span><span>Complete query + response audit log on your hardware</span></li>
-          <li><span class="check">✓</span><span>No vendor access to your conversations, ever</span></li>
-          <li><span class="check">✓</span><span>Works behind existing firewall &amp; IT policies</span></li>
-          <li><span class="check">✓</span><span>No per-user licensing or usage metering</span></li>
-        </ul>
+        <span class="sec-eyebrow">Agent Marketplace</span>
+        <h2>The open-source ecosystem,<br/><span class="grad-cyan">unified.</span></h2>
       </div>
-      <div class="privacy-visual">
-        <p style="font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:1rem;">Data flow comparison</p>
-        <p style="font-size:0.78rem; color:#22c55e; font-weight:600; margin-bottom:0.5rem;">✓ Aethyro</p>
-        <div class="flow-step"><span class="flow-dot green"></span><span>Your team asks a question</span></div>
-        <div class="flow-divider">↓</div>
-        <div class="flow-step"><span class="flow-dot blue"></span><span>Aethyro processes locally on your hardware</span></div>
-        <div class="flow-divider">↓</div>
-        <div class="flow-step"><span class="flow-dot cyan"></span><span>Answer delivered — data never leaves</span></div>
+      <div class="filter-row">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Coding</button>
+        <button class="filter-btn">Research</button>
+        <button class="filter-btn">Personal</button>
+        <button class="filter-btn">Toolkit</button>
+      </div>
+    </div>
+    <div class="agents-grid">
 
-        <div style="margin-top: 1.5rem;">
-          <p style="font-size:0.78rem; color:#f87171; font-weight:600; margin-bottom:0.5rem;">✗ Cloud AI tools</p>
-          <div class="flow-step" style="background:rgba(239,68,68,0.06); border-color:rgba(239,68,68,0.15);">
-            <span class="flow-dot" style="background:#ef4444"></span>
-            <span>Your client data transmitted to vendor servers</span>
+      <div class="agent-card featured-agent">
+        <div class="card-top">
+          <div class="agent-icon" style="background:rgba(255,77,0,.12)">🤖</div>
+          <div class="card-badges"><span class="badge b-featured">⭐ Featured</span><span class="badge b-orange">Coding</span></div>
+        </div>
+        <div><div class="agent-name">Claude Code</div><div class="agent-by">by Anthropic</div></div>
+        <p class="agent-desc">The only agent with native subagent spawning — parallelizes work across multiple simultaneous agents. Reads files, runs bash, uses MCP servers, manages git. The most capable coding agent.</p>
+        <div class="agent-tags"><span class="atag">Subagents</span><span class="atag">Multi-file</span><span class="atag">MCP</span><span class="atag">Git-aware</span></div>
+        <div class="agent-cmd"><span>ollama launch claude</span><span class="copy-btn" onclick="copyIt(this,'ollama launch claude')">copy</span></div>
+      </div>
+
+      <div class="agent-card">
+        <div class="card-top">
+          <div class="agent-icon" style="background:rgba(0,212,255,.1)">🦾</div>
+          <div class="card-badges"><span class="badge b-cyan">Personal</span><span class="badge b-cyan">100+ Skills</span></div>
+        </div>
+        <div><div class="agent-name">OpenClaw</div><div class="agent-by">Open Source</div></div>
+        <p class="agent-desc">100+ modular capabilities — web search, calendar, email, file management, API calls, knowledge management. The Swiss Army knife for personal and business productivity.</p>
+        <div class="agent-tags"><span class="atag">100+ skills</span><span class="atag">Automation</span><span class="atag">Non-technical</span></div>
+        <div class="agent-cmd"><span>ollama launch openclaw</span><span class="copy-btn" onclick="copyIt(this,'ollama launch openclaw')">copy</span></div>
+      </div>
+
+      <div class="agent-card">
+        <div class="card-top">
+          <div class="agent-icon" style="background:rgba(139,92,246,.1)">🧿</div>
+          <div class="card-badges"><span class="badge b-violet">Agent</span><span class="badge b-violet">Self-Improve</span></div>
+        </div>
+        <div><div class="agent-name">Hermes Agent</div><div class="agent-by">by Nous Research</div></div>
+        <p class="agent-desc">Built on Nous Research's Hermes models — best open-source function calling. Self-reflective: critiques and revises its own outputs. Top pick for complex multi-step workflows.</p>
+        <div class="agent-tags"><span class="atag">Self-reflection</span><span class="atag">Long-horizon</span><span class="atag">Tool-use</span></div>
+        <div class="agent-cmd"><span>ollama launch hermes</span><span class="copy-btn" onclick="copyIt(this,'ollama launch hermes')">copy</span></div>
+      </div>
+
+      <div class="agent-card">
+        <div class="card-top">
+          <div class="agent-icon" style="background:rgba(245,158,11,.1)">🔐</div>
+          <div class="card-badges"><span class="badge b-orange">Coding</span><span class="badge b-gold">Privacy-First</span></div>
+        </div>
+        <div><div class="agent-name">OpenCode</div><div class="agent-by">by Anomaly</div></div>
+        <p class="agent-desc">Zero telemetry, no API keys, fully air-gapped. The compliance architect's coding agent — built for healthcare, finance, legal, and government data requirements.</p>
+        <div class="agent-tags"><span class="atag">Air-gapped</span><span class="atag">HIPAA-friendly</span><span class="atag">Git</span></div>
+        <div class="agent-cmd"><span>ollama launch opencode</span><span class="copy-btn" onclick="copyIt(this,'ollama launch opencode')">copy</span></div>
+      </div>
+
+      <div class="agent-card">
+        <div class="card-top">
+          <div class="agent-icon" style="background:rgba(34,197,94,.1)">⚡</div>
+          <div class="card-badges"><span class="badge b-orange">Coding</span></div>
+        </div>
+        <div><div class="agent-name">Codex</div><div class="agent-by">by OpenAI (open source)</div></div>
+        <p class="agent-desc">OpenAI's open-sourced CLI coding agent — the household name. Supports OpenAI-compatible endpoints so it runs locally against Ollama. Terminal-native, web-capable.</p>
+        <div class="agent-tags"><span class="atag">Brand recognition</span><span class="atag">Web browsing</span><span class="atag">CLI-native</span></div>
+        <div class="agent-cmd"><span>ollama launch codex</span><span class="copy-btn" onclick="copyIt(this,'ollama launch codex')">copy</span></div>
+      </div>
+
+      <div class="agent-card">
+        <div class="card-top">
+          <div class="agent-icon" style="background:rgba(59,130,246,.1)">🐙</div>
+          <div class="card-badges"><span class="badge b-orange">Coding</span><span class="badge b-cyan">GitHub</span></div>
+        </div>
+        <div><div class="agent-name">Copilot CLI</div><div class="agent-by">by GitHub (Microsoft)</div></div>
+        <p class="agent-desc">Deep repository-awareness. Navigates branches, reviews PRs, triages issues, automates the issue-to-merged-PR pipeline. Essential for GitHub-centric dev teams.</p>
+        <div class="agent-tags"><span class="atag">Issue→PR</span><span class="atag">PR review</span><span class="atag">CI/CD</span></div>
+        <div class="agent-cmd"><span>ollama launch copilot</span><span class="copy-btn" onclick="copyIt(this,'ollama launch copilot')">copy</span></div>
+      </div>
+
+      <div class="agent-card">
+        <div class="card-top">
+          <div class="agent-icon" style="background:rgba(139,92,246,.1)">🏭</div>
+          <div class="card-badges"><span class="badge b-violet">Coding</span><span class="badge b-violet">Persistent</span></div>
+        </div>
+        <div><div class="agent-name">Droid</div><div class="agent-by">by Factory (YC)</div></div>
+        <p class="agent-desc">Factory's autonomous engineering agent. Memory persists across sessions. Terminal + IDE unified. Plans multi-sprint work and maps architecture on first run.</p>
+        <div class="agent-tags"><span class="atag">Cross-session</span><span class="atag">IDE+terminal</span><span class="atag">Multi-sprint</span></div>
+        <div class="agent-cmd"><span>ollama launch droid</span><span class="copy-btn" onclick="copyIt(this,'ollama launch droid')">copy</span></div>
+      </div>
+
+      <div class="agent-card">
+        <div class="card-top">
+          <div class="agent-icon" style="background:rgba(34,197,94,.1)">🧩</div>
+          <div class="card-badges"><span class="badge b-green">Toolkit</span><span class="badge b-green">Build Your Own</span></div>
+        </div>
+        <div><div class="agent-name">Pi</div><div class="agent-by">Open Source</div></div>
+        <p class="agent-desc">Minimal agent toolkit with plugin support. Zero assumptions, zero bloat — the clean foundation for composing exactly the capabilities you need. White-label ready.</p>
+        <div class="agent-tags"><span class="atag">Plugin arch</span><span class="atag">White-label</span><span class="atag">Zero lock-in</span></div>
+        <div class="agent-cmd"><span>ollama launch pi</span><span class="copy-btn" onclick="copyIt(this,'ollama launch pi')">copy</span></div>
+      </div>
+
+    </div>
+    <div class="marketplace-footer">
+      <p>More agents launching monthly. Build one and earn from marketplace listings.</p>
+      <a href="mailto:leer4030@gmail.com?subject=Submit%20My%20Agent" class="btn btn-sm btn-ghost">Submit Your Agent →</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── SOFTWARE MARKETPLACE ── -->
+<section class="software-section" id="software">
+  <div class="container">
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">Software Marketplace</span>
+        <h2>Ready-to-deploy AI products.<br/><span class="grad-orange">Built for your industry.</span></h2>
+      </div>
+      <div class="filter-row">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Aethyro</button>
+        <button class="filter-btn">Finance</button>
+        <button class="filter-btn">Engineering</button>
+        <button class="filter-btn">Research</button>
+        <button class="filter-btn">Coming Soon</button>
+      </div>
+    </div>
+    <div class="software-grid">
+
+      <div class="sw-card flagship">
+        <div class="sw-glow" style="background:radial-gradient(circle,rgba(255,77,0,.12),transparent 70%)"></div>
+        <div class="sw-top">
+          <div class="sw-icon">⚖️</div>
+          <div class="sw-badges"><span class="badge b-orange">Aethyro</span><span class="badge b-featured">★ Flagship</span></div>
+        </div>
+        <div class="sw-name">Aethyro CPA</div>
+        <div class="sw-by">Private AI for Accounting Firms</div>
+        <p class="sw-tagline">The only AI physically incapable of leaking client data. Tax research, IRS drafts, compliance memos — on your hardware.</p>
+        <div class="sw-agents"><span class="sw-agent-tag">Hermes Agent</span><span class="sw-agent-tag">OpenCode</span><span class="sw-agent-tag">Pi tax skills</span></div>
+        <ul class="sw-features">
+          <li><span class="ck">✓</span>Tax research Q&amp;A (IRC, regs, rulings)</li>
+          <li><span class="ck">✓</span>IRS correspondence drafts</li>
+          <li><span class="ck">✓</span>Compliance memo generation</li>
+          <li><span class="ck">✓</span>Document Q&amp;A on your firm's files</li>
+          <li><span class="ck">✓</span>Zero client data egress, works offline</li>
+        </ul>
+        <div class="sw-price"><span class="amt">$499</span><span class="per">/mo · + $500 setup</span></div>
+        <a href="mailto:leer4030@gmail.com?subject=Aethyro%20CPA%20Inquiry" class="sw-cta sw-cta-orange">Contact Sales →</a>
+      </div>
+
+      <div class="sw-card">
+        <div class="sw-glow" style="background:radial-gradient(circle,rgba(139,92,246,.1),transparent 70%)"></div>
+        <div class="sw-top">
+          <div class="sw-icon">⚙️</div>
+          <div class="sw-badges"><span class="badge b-orange">Aethyro</span><span class="badge b-violet">Engineering</span></div>
+        </div>
+        <div class="sw-name">Aethyro Dev</div>
+        <div class="sw-by">Autonomous Engineering for Teams</div>
+        <p class="sw-tagline">Ship 2–3× faster. Persistent codebase memory, Issue→PR automation, multi-sprint planning.</p>
+        <div class="sw-agents"><span class="sw-agent-tag">Droid</span><span class="sw-agent-tag">Copilot CLI</span><span class="sw-agent-tag">Claude Code</span></div>
+        <ul class="sw-features">
+          <li><span class="ck">✓</span>Persistent codebase memory</li>
+          <li><span class="ck">✓</span>Issue → PR automation</li>
+          <li><span class="ck">✓</span>Multi-sprint planning</li>
+          <li><span class="ck">✓</span>IDE + terminal unified (up to 5 devs)</li>
+        </ul>
+        <div class="sw-price"><span class="amt">$299</span><span class="per">/mo · up to 5 devs</span></div>
+        <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Dev%20Inquiry" class="sw-cta sw-cta-ghost">Contact Sales →</a>
+      </div>
+
+      <div class="sw-card">
+        <div class="sw-glow" style="background:radial-gradient(circle,rgba(0,212,255,.08),transparent 70%)"></div>
+        <div class="sw-top">
+          <div class="sw-icon">🔍</div>
+          <div class="sw-badges"><span class="badge b-orange">Aethyro</span><span class="badge b-cyan">Research</span></div>
+        </div>
+        <div class="sw-name">Aethyro Research</div>
+        <div class="sw-by">Deep Intelligence for Analysts</div>
+        <p class="sw-tagline">Long-horizon reasoning on your private document library. For law firms, analysts, and institutions.</p>
+        <div class="sw-agents"><span class="sw-agent-tag">Hermes Agent</span><span class="sw-agent-tag">OpenClaw</span></div>
+        <ul class="sw-features">
+          <li><span class="ck">✓</span>Document corpus Q&amp;A (RAG)</li>
+          <li><span class="ck">✓</span>Multi-step research with citations</li>
+          <li><span class="ck">✓</span>100% air-gapped, privilege-safe</li>
+          <li><span class="ck">✓</span>Unlimited users</li>
+        </ul>
+        <div class="sw-price"><span class="amt">$199</span><span class="per">/mo · unlimited users</span></div>
+        <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Research%20Inquiry" class="sw-cta sw-cta-ghost">Contact Sales →</a>
+      </div>
+
+      <div class="sw-card">
+        <div class="sw-glow" style="background:radial-gradient(circle,rgba(34,197,94,.07),transparent 70%)"></div>
+        <div class="sw-top">
+          <div class="sw-icon">🎯</div>
+          <div class="sw-badges"><span class="badge b-orange">Aethyro</span><span class="badge b-green">Personal</span></div>
+        </div>
+        <div class="sw-name">Aethyro Personal</div>
+        <div class="sw-by">AI Assistant for Solopreneurs</div>
+        <p class="sw-tagline">100+ skills, local knowledge base, daily workflow automation. Your AI for everything — privately.</p>
+        <div class="sw-agents"><span class="sw-agent-tag">OpenClaw</span><span class="sw-agent-tag">Pi custom skills</span></div>
+        <ul class="sw-features">
+          <li><span class="ck">✓</span>100+ pre-built skills</li>
+          <li><span class="ck">✓</span>Build &amp; import custom skills</li>
+          <li><span class="ck">✓</span>Local knowledge base &amp; memory</li>
+        </ul>
+        <div class="sw-price"><span class="amt">$29</span><span class="per">/mo · 1 user</span></div>
+        <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Personal%20Waitlist" class="sw-cta sw-cta-ghost">Join Waitlist →</a>
+      </div>
+
+      <div class="sw-card" style="opacity:.65">
+        <div class="sw-top">
+          <div class="sw-icon">⚡</div>
+          <div class="sw-badges"><span class="badge b-orange">Aethyro</span><span class="badge b-red b-new">Q3 2026</span></div>
+        </div>
+        <div class="sw-name">Aethyro Legal</div>
+        <div class="sw-by">Private AI for Law Firms</div>
+        <p class="sw-tagline">Case research, brief drafting, contract review — attorney-client privilege preserved by architecture.</p>
+        <div class="sw-agents"><span class="sw-agent-tag">Hermes Agent</span><span class="sw-agent-tag">Pi legal skills</span></div>
+        <ul class="sw-features">
+          <li><span class="ck">✓</span>Case law research &amp; citation</li>
+          <li><span class="ck">✓</span>Contract clause analysis</li>
+          <li><span class="ck">✓</span>Brief drafting assistant</li>
+        </ul>
+        <div class="sw-price"><span class="amt">$599</span><span class="per">/mo · Coming Q3 2026</span></div>
+        <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Legal%20Early%20Access" class="sw-cta sw-cta-coming">Early Access →</a>
+      </div>
+
+      <div class="sw-card" style="opacity:.65">
+        <div class="sw-top">
+          <div class="sw-icon">🏥</div>
+          <div class="sw-badges"><span class="badge b-orange">Aethyro</span><span class="badge b-red b-new">Q4 2026</span></div>
+        </div>
+        <div class="sw-name">Aethyro Healthcare</div>
+        <div class="sw-by">HIPAA-Compliant Clinical AI</div>
+        <p class="sw-tagline">Clinical documentation, record Q&amp;A, and coding assistance — zero PHI data egress.</p>
+        <div class="sw-agents"><span class="sw-agent-tag">Hermes Agent</span><span class="sw-agent-tag">OpenCode</span></div>
+        <ul class="sw-features">
+          <li><span class="ck">✓</span>Clinical note drafting</li>
+          <li><span class="ck">✓</span>ICD-10 / CPT code assistance</li>
+          <li><span class="ck">✓</span>Zero PHI transmission</li>
+        </ul>
+        <div class="sw-price"><span class="amt">$799</span><span class="per">/mo · Coming Q4 2026</span></div>
+        <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Healthcare%20Early%20Access" class="sw-cta sw-cta-coming">Early Access →</a>
+      </div>
+
+    </div>
+    <div class="list-cta-box">
+      <h3>Have an AI product? List it here.</h3>
+      <p>Aethyro is an open marketplace. Built a local-AI product or vertical solution? Reach thousands of AI-forward buyers monthly. Revenue share model available.</p>
+      <a href="mailto:leer4030@gmail.com?subject=List%20My%20Product" class="btn btn-sm btn-ghost">Apply to List Your Product →</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── RESEARCH FEED ── -->
+<section class="research-section" id="research">
+  <div class="container">
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">AI Research &amp; Breakthroughs</span>
+        <h2>What's moving the frontier.<br/><span class="grad-mix">Updated weekly.</span></h2>
+      </div>
+      <div class="filter-row">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Models</button>
+        <button class="filter-btn">Hardware</button>
+        <button class="filter-btn">Agents</button>
+        <button class="filter-btn">Inference</button>
+      </div>
+    </div>
+    <div class="research-layout">
+      <div class="research-feed">
+
+        <div class="r-card-hero breakthrough">
+          <div class="r-meta">
+            <span class="badge b-cyan">Inference</span>
+            <span class="badge b-orange">Hardware</span>
+            <span class="badge b-live">New</span>
+            <span class="r-date">May 2026</span>
           </div>
-          <div class="flow-blocked">⚠ Stored, processed, and potentially logged by third parties</div>
+          <h3>Ollama 0.24.0: Flash Attention by Default + 30% MoE Throughput on RTX GPUs</h3>
+          <p>Flash attention is now standard on supported models. A new GPU memory management scheme delivers ~30% throughput improvement on mixture-of-expert models. LogProbs added to the API unlocks classification, perplexity scoring, and self-evaluation pipelines. Also: 35% MoE improvement in llama.cpp via CUDA graph optimization. Blackwell MXFP4 support brings 25% faster prompt processing on RTX 5050/5080.</p>
+          <div class="r-footer">
+            <div class="r-tags"><span class="r-tag">Ollama</span><span class="r-tag">llama.cpp</span><span class="r-tag">MoE</span><span class="r-tag">Blackwell</span></div>
+            <a href="mailto:leer4030@gmail.com?subject=Research%20–%20Ollama%200.24" class="r-link">Read Full Analysis →</a>
+          </div>
+        </div>
+
+        <div class="r-card sponsored">
+          <span class="sponsored-flag">Sponsored</span>
+          <div class="r-thumb" style="background:rgba(139,92,246,.1)">🟢</div>
+          <div>
+            <div class="r-meta"><span class="badge b-violet">Models</span><span class="badge b-sponsored">Sponsored</span><span class="r-date">May 2026</span></div>
+            <h3>Nemotron 3 Nano: 32B MoE, 3.6B Active Params, 1M Context — Fits 8GB VRAM</h3>
+            <p>NVIDIA's latest packs GPT-4-class reasoning into a model with 3.6B active parameters. Tops leaderboards for coding, instruction following, and STEM. Fine-tunable via LoRA with Unsloth on RTX hardware. Weights, recipes, and datasets fully open.</p>
+            <div class="r-footer">
+              <div class="r-tags"><span class="r-tag">NVIDIA</span><span class="r-tag">MoE</span><span class="r-tag">Fine-tuning</span></div>
+              <a href="mailto:leer4030@gmail.com?subject=Research%20–%20Nemotron" class="r-link">Read Full Analysis →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="r-card">
+          <div class="r-thumb" style="background:rgba(255,77,0,.1)">🤖</div>
+          <div>
+            <div class="r-meta"><span class="badge b-orange">Agents</span><span class="r-date">May 2026</span></div>
+            <h3>Ollama Launches Agent Distribution Layer: 8 Agents, One Command</h3>
+            <p>The new <code style="background:rgba(255,77,0,.1);padding:.1rem .3rem;border-radius:4px;font-size:.78rem;color:#ff9966">ollama launch</code> command transforms the inference engine into an agent platform — this is the App Store moment for local AI, and Aethyro is the OS layer on top.</p>
+            <div class="r-footer">
+              <div class="r-tags"><span class="r-tag">Ollama</span><span class="r-tag">Platform</span></div>
+              <a href="mailto:leer4030@gmail.com?subject=Research%20–%20Agents" class="r-link">Read Full Analysis →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="r-card">
+          <div class="r-thumb" style="background:rgba(245,158,11,.1)">⚡</div>
+          <div>
+            <div class="r-meta"><span class="badge b-gold">Hardware</span><span class="badge b-orange">Models</span><span class="r-date">Jan 2026</span></div>
+            <h3>NVIDIA CES 2026: NVFP4 on Blackwell — 3× ComfyUI, LTX-2 4K50fps, Docling 4× RAG</h3>
+            <p>Blackwell GPUs get MXFP4 via fifth-generation Tensor Cores. ComfyUI sees 3–4× throughput. LTX-2 launches as the first open audio-video model at 4K50fps. Docling brings 4× faster RAG document parsing to RTX PCs.</p>
+            <div class="r-footer">
+              <div class="r-tags"><span class="r-tag">Blackwell</span><span class="r-tag">ComfyUI</span><span class="r-tag">LTX-2</span></div>
+              <a href="mailto:leer4030@gmail.com?subject=Research%20–%20CES%202026" class="r-link">Read Full Analysis →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="r-card">
+          <div class="r-thumb" style="background:rgba(34,197,94,.08)">🧬</div>
+          <div>
+            <div class="r-meta"><span class="badge b-green">Models</span><span class="r-date">Apr 2026</span></div>
+            <h3>Qwen 3 30B A3B: Best Open-Source MoE for 8GB VRAM Local Deployment</h3>
+            <p>Alibaba's Qwen 3 30B A3B achieves GPT-4-class reasoning with only 3B active parameters. Fits 6–8GB VRAM at Q4. Paired with CUDA graph optimization — the most capable 8GB-class model yet.</p>
+            <div class="r-footer">
+              <div class="r-tags"><span class="r-tag">Qwen 3</span><span class="r-tag">MoE</span><span class="r-tag">8GB VRAM</span></div>
+              <a href="mailto:leer4030@gmail.com?subject=Research%20–%20Qwen3" class="r-link">Read Full Analysis →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="r-more">
+          <a href="mailto:leer4030@gmail.com?subject=Research%20Newsletter" class="btn btn-sm btn-ghost">Subscribe for Weekly Digest →</a>
+        </div>
+      </div>
+
+      <div class="r-sidebar">
+        <div class="sidebar-box">
+          <h4>📬 Weekly AI Digest</h4>
+          <p style="font-size:.78rem;color:var(--t2);margin-bottom:.75rem;line-height:1.6">Breakthroughs, model drops, and agent releases — curated every Friday. Free forever.</p>
+          <form class="nl-form" onsubmit="return nlSubmit(event)">
+            <input type="email" class="nl-input" placeholder="your@email.com" required/>
+            <button type="submit" class="nl-btn">Subscribe Free →</button>
+          </form>
+          <p style="font-size:.65rem;color:var(--t3);margin-top:.5rem">No spam. Unsubscribe anytime.</p>
+        </div>
+
+        <div class="sidebar-box">
+          <h4>🔥 Trending</h4>
+          <div class="trending-item"><span class="t-num">#1</span><div><div class="t-title">Ollama agent marketplace launch</div><div class="t-views">4.2k reads</div></div></div>
+          <div class="trending-item"><span class="t-num">#2</span><div><div class="t-title">Nemotron 3 Nano benchmark breakdown</div><div class="t-views">3.1k reads</div></div></div>
+          <div class="trending-item"><span class="t-num">#3</span><div><div class="t-title">MXFP4 vs Q4_K_M on RTX 5050</div><div class="t-views">2.8k reads</div></div></div>
+          <div class="trending-item"><span class="t-num">#4</span><div><div class="t-title">Qwen 3 vs Hermes 3: local benchmark</div><div class="t-views">1.9k reads</div></div></div>
+        </div>
+
+        <div class="sidebar-box">
+          <h4>🏷 Topics</h4>
+          <div class="topic-grid">
+            <span class="topic-tag">LLM</span><span class="topic-tag">SLM</span><span class="topic-tag">MoE</span>
+            <span class="topic-tag">Agents</span><span class="topic-tag">RAG</span><span class="topic-tag">Fine-tuning</span>
+            <span class="topic-tag">GGUF</span><span class="topic-tag">CUDA</span><span class="topic-tag">Ollama</span>
+            <span class="topic-tag">Blackwell</span><span class="topic-tag">Inference</span><span class="topic-tag">Vision</span>
+          </div>
+        </div>
+
+        <div class="sidebar-box sidebar-sponsor">
+          <div style="font-size:.62rem;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem;font-family:var(--mono);font-weight:700">⭐ Sponsor Slot</div>
+          <h4>Advertise Here</h4>
+          <p style="font-size:.78rem;color:var(--t2);line-height:1.6;margin-bottom:.75rem">Reach 10,000+ AI/ML builders per month. Sidebar placement in the research feed.</p>
+          <a href="mailto:leer4030@gmail.com?subject=Sidebar%20Sponsorship" class="btn btn-sm btn-ghost" style="display:block;text-align:center;text-decoration:none">Inquire About Rates →</a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- USE CASES -->
-<section>
+<div class="divider"></div>
+
+<!-- ── DATASET STORE ── -->
+<section class="data-section" id="data">
   <div class="container">
-    <span class="section-label">Use Cases</span>
-    <h2>Built for how accountants actually work.</h2>
-    <p class="section-intro">
-      Aethyro handles the research and drafting that eats billable hours —
-      so your team focuses on the work clients pay premium rates for.
-    </p>
-    <div class="use-cases-grid">
-      <div class="use-case">
-        <div class="use-case-tag">Tax Research</div>
-        <h3>IRC code lookups in seconds</h3>
-        <p>Ask plain-English questions about tax law. Get cited, structured answers without leaving your desk or paying per query.</p>
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">Dataset Marketplace</span>
+        <h2>Rare AI training data.<br/><span class="grad-cyan">Real emergence at scale.</span></h2>
+        <p class="sec-sub" style="margin-top:.5rem">High-value datasets from live AI systems — built from production AI, not synthetic generation.</p>
       </div>
-      <div class="use-case">
-        <div class="use-case-tag">Compliance</div>
-        <h3>Compliance memo drafts</h3>
-        <p>Draft client-ready compliance memos, engagement letters, and disclosure documents in your firm's voice.</p>
+      <div class="filter-row">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Agent Behavior</button>
+        <button class="filter-btn">Economics</button>
+        <button class="filter-btn">Training Pairs</button>
       </div>
-      <div class="use-case">
-        <div class="use-case-tag">Client Work</div>
-        <h3>IRS correspondence</h3>
-        <p>Generate first drafts of IRS response letters, penalty abatement requests, and audit notices — reviewed by your team, not outsourced to the cloud.</p>
+    </div>
+    <div class="data-grid">
+
+      <div class="d-card d-featured">
+        <div class="d-top">
+          <div class="d-icon">🏛️</div>
+          <div><span class="badge b-green">Featured</span>&nbsp;<span class="badge b-live">Live</span></div>
+        </div>
+        <div><div class="d-name">SovereignCore Economy Dataset v1</div><div class="d-version">v1.0 · Updated May 2026 · tastytator/sovereign-economy</div></div>
+        <p class="d-desc">55M+ simulated economic transactions from a live 3,059-agent AI economy across 20 evolutionary generations. Includes agent decision logs, resource allocation patterns, inter-agent negotiation transcripts, market emergence events, and generational fitness metrics. No other public dataset captures multi-agent economic emergence at this scale.</p>
+        <div class="d-stats">
+          <div class="d-stat"><strong>55M+</strong><span>Transactions</span></div>
+          <div class="d-stat"><strong>3,059</strong><span>Agents</span></div>
+          <div class="d-stat"><strong>Gen 20</strong><span>Evolution</span></div>
+        </div>
+        <div class="d-formats"><span class="d-fmt">.parquet</span><span class="d-fmt">.jsonl</span><span class="d-fmt">.csv</span><span class="d-fmt">SQLite</span></div>
+        <div class="d-use">Best for: RL training, multi-agent simulation, emergent behavior research, economic modeling, agent eval benchmarks.</div>
+        <div class="d-price-row">
+          <div class="d-price"><span class="amt">$2,500</span><span class="per"> one-time</span><br/><span class="orig">or $499/mo subscription</span></div>
+          <a href="mailto:leer4030@gmail.com?subject=SovereignCore%20Dataset%20Purchase" class="btn-data btn-data-orange">Buy Dataset →</a>
+        </div>
       </div>
-      <div class="use-case">
-        <div class="use-case-tag">Knowledge Base</div>
-        <h3>Internal Q&amp;A on your docs</h3>
-        <p>Upload your firm's procedures, prior returns, and client history. Ask questions. Get answers grounded in your actual files.</p>
+
+      <div class="d-card">
+        <div class="d-top">
+          <div class="d-icon">🧠</div>
+          <div><span class="badge b-orange">Training</span></div>
+        </div>
+        <div><div class="d-name">Sovereign Agent Training Pairs</div><div class="d-version">v2.3 · 115,813 pairs · HuggingFace: tastytator/sovereign-economy</div></div>
+        <p class="d-desc">115,813 curated instruction-response pairs from live agent interactions across 5 specialized roles (oracle, forge, codex, nexus, sentinel). Each pair includes role context, chain-of-thought reasoning, and quality score. SFT, RLHF, and DPO ready.</p>
+        <div class="d-stats">
+          <div class="d-stat"><strong>115K</strong><span>Pairs</span></div>
+          <div class="d-stat"><strong>5</strong><span>Agent roles</span></div>
+          <div class="d-stat"><strong>SFT</strong><span>Ready</span></div>
+        </div>
+        <div class="d-formats"><span class="d-fmt">.jsonl</span><span class="d-fmt">HuggingFace</span><span class="d-fmt">.parquet</span></div>
+        <div class="d-use">Best for: SFT fine-tuning, RLHF pipelines, DPO training, agent persona specialization.</div>
+        <div class="d-price-row">
+          <div class="d-price"><span class="amt">$799</span><span class="per"> one-time</span><br/><span class="orig">or $149/mo subscription</span></div>
+          <a href="mailto:leer4030@gmail.com?subject=Training%20Pairs%20Dataset%20Purchase" class="btn-data btn-data-green">Buy Dataset →</a>
+        </div>
       </div>
-      <div class="use-case">
-        <div class="use-case-tag">Staff Training</div>
-        <h3>Junior staff augmentation</h3>
-        <p>New staff ask Aethyro before escalating. Reduces partner review time on basic research questions by 40–60%.</p>
+
+      <div class="d-card">
+        <div class="d-top">
+          <div class="d-icon">📈</div>
+          <div><span class="badge b-violet">Research</span></div>
+        </div>
+        <div><div class="d-name">Multi-Agent Emergence &amp; Causality Dataset</div><div class="d-version">v1.2 · 20 generations · 8.2M events</div></div>
+        <p class="d-desc">Causal ATE insights from 20 evolutionary generations of a 3,059-agent economy. Captures behavioral mutation fitness gains, strategy bifurcations, emergent coalition formation, and phase transitions in collective behavior. Unique for causal ML and evolutionary AI research.</p>
+        <div class="d-stats">
+          <div class="d-stat"><strong>20</strong><span>Generations</span></div>
+          <div class="d-stat"><strong>ATE</strong><span>Causal</span></div>
+          <div class="d-stat"><strong>8.2M</strong><span>Events</span></div>
+        </div>
+        <div class="d-formats"><span class="d-fmt">.parquet</span><span class="d-fmt">.jsonl</span><span class="d-fmt">networkx</span></div>
+        <div class="d-use">Best for: causal ML research, evolutionary AI, agent strategy analysis, multi-agent RL benchmarking.</div>
+        <div class="d-price-row">
+          <div class="d-price"><span class="amt">$1,200</span><span class="per"> one-time</span><br/><span class="orig">or $249/mo subscription</span></div>
+          <a href="mailto:leer4030@gmail.com?subject=Emergence%20Dataset%20Purchase" class="btn-data btn-data-green">Buy Dataset →</a>
+        </div>
       </div>
-      <div class="use-case">
-        <div class="use-case-tag">Busy Season</div>
-        <h3>Scales with your workload</h3>
-        <p>Flat monthly fee. No per-query charges. Busy season costs the same as the slow months — you keep the margin.</p>
+
+      <div class="d-card" style="border-style:dashed">
+        <div class="d-top">
+          <div class="d-icon">🔧</div>
+          <div><span class="badge b-gold">Custom</span></div>
+        </div>
+        <div><div class="d-name">Custom Dataset Request</div><div class="d-version">Enterprise · Bespoke extraction</div></div>
+        <p class="d-desc">Need a specific slice? Custom time windows, specific agent cohorts, filtered by strategy or fitness class. Extracted in your required format with full schema documentation. NDAs available.</p>
+        <div class="d-stats">
+          <div class="d-stat"><strong>Any</strong><span>Window</span></div>
+          <div class="d-stat"><strong>Any</strong><span>Cohort</span></div>
+          <div class="d-stat"><strong>Any</strong><span>Format</span></div>
+        </div>
+        <div class="d-formats"><span class="d-fmt">Any format</span><span class="d-fmt">Custom schema</span><span class="d-fmt">NDA ok</span></div>
+        <div class="d-use">Turnaround: 3–5 business days. Enterprise licensing supported. Quote within 48h.</div>
+        <div class="d-price-row">
+          <div class="d-price"><span class="amt">Custom</span><br/><span class="orig">Quote in 48h</span></div>
+          <a href="mailto:leer4030@gmail.com?subject=Custom%20Dataset%20Request" class="btn-data btn-data-orange">Request Quote →</a>
+        </div>
+      </div>
+
+    </div>
+    <div class="data-list-cta">
+      <h3>Have a valuable dataset to monetize?</h3>
+      <p>Generated proprietary AI training data — agent logs, fine-tuning pairs, behavioral traces, domain corpora? List it on Aethyro. Revenue share model. NDA and licensing support included.</p>
+      <a href="mailto:leer4030@gmail.com?subject=List%20My%20Dataset" class="btn btn-sm btn-ghost">Submit a Dataset Listing →</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── SPONSORS ── -->
+<section class="sponsor-section" id="sponsors">
+  <div class="container">
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">Sponsor &amp; Vendor Program</span>
+        <h2>Reach the people building<br/><span class="grad-orange">with local AI.</span></h2>
+        <p class="sec-sub" style="margin-top:.5rem">Developers, ML engineers, and AI-forward business owners actively deploying local models. High-intent, technical, early-adopter.</p>
+      </div>
+    </div>
+    <div class="sponsor-tiers">
+      <div class="tier-card">
+        <div class="tier-crown">🥉</div>
+        <div class="tier-label">Bronze Sponsor</div>
+        <div class="tier-price">$299 <span>/mo</span></div>
+        <p class="tier-desc">Brand visibility for tools targeting AI builders and developers.</p>
+        <ul class="tier-perks">
+          <li><span class="ck">✓</span>Logo in footer + sponsors section</li>
+          <li><span class="ck">✓</span>1 research post mention/mo</li>
+          <li><span class="ck">✓</span>Newsletter text mention</li>
+          <li><span class="ck">✓</span>Marketplace badge</li>
+        </ul>
+        <a href="mailto:leer4030@gmail.com?subject=Bronze%20Sponsorship" class="sw-cta sw-cta-ghost">Apply →</a>
+      </div>
+      <div class="tier-card tier-gold">
+        <div class="tier-crown">🥇</div>
+        <div class="tier-label">Gold Sponsor</div>
+        <div class="tier-price">$799 <span>/mo</span></div>
+        <p class="tier-desc">Prime placement for GPU vendors, AI tooling companies, and model publishers.</p>
+        <ul class="tier-perks">
+          <li><span class="ck">✓</span>Branded sidebar card in research feed</li>
+          <li><span class="ck">✓</span>1 sponsored research post/mo</li>
+          <li><span class="ck">✓</span>Featured in newsletter header</li>
+          <li><span class="ck">✓</span>Agent/software listing priority</li>
+          <li><span class="ck">✓</span>Nav banner rotation</li>
+        </ul>
+        <a href="mailto:leer4030@gmail.com?subject=Gold%20Sponsorship" class="sw-cta sw-cta-orange">Apply for Gold →</a>
+      </div>
+      <div class="tier-card tier-platinum">
+        <div class="tier-crown">💎</div>
+        <div class="tier-label">Platinum / Title Sponsor</div>
+        <div class="tier-price">$2,500 <span>/mo</span></div>
+        <p class="tier-desc">Maximum visibility. Own the local AI category conversation.</p>
+        <ul class="tier-perks">
+          <li><span class="ck">✓</span>"Powered by [Sponsor]" in hero ticker</li>
+          <li><span class="ck">✓</span>Dedicated deep-dive research post</li>
+          <li><span class="ck">✓</span>Homepage featured section</li>
+          <li><span class="ck">✓</span>Newsletter header + co-branding</li>
+          <li><span class="ck">✓</span>Free software marketplace listing</li>
+          <li><span class="ck">✓</span>Direct intro to Aethyro enterprise buyers</li>
+        </ul>
+        <a href="mailto:leer4030@gmail.com?subject=Platinum%20Sponsorship" class="sw-cta sw-cta-ghost" style="border-color:rgba(139,92,246,.4)">Apply for Platinum →</a>
+      </div>
+    </div>
+    <div class="sponsor-slots">
+      <h3>// Current Sponsor Slots</h3>
+      <div class="slots-grid">
+        <div class="slot"><div style="font-size:1.1rem;margin-bottom:.3rem">📌</div><p>Gold slot<br/>available</p></div>
+        <div class="slot"><div style="font-size:1.1rem;margin-bottom:.3rem">📌</div><p>Gold slot<br/>available</p></div>
+        <div class="slot"><div style="font-size:1.1rem;margin-bottom:.3rem">📌</div><p>Bronze slot<br/>available</p></div>
+        <div class="slot"><div style="font-size:1.1rem;margin-bottom:.3rem">📌</div><p>Bronze slot<br/>available</p></div>
+        <div class="slot"><div style="font-size:1.1rem;margin-bottom:.3rem">📌</div><p>Bronze slot<br/>available</p></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRICING -->
-<section class="pricing-section">
-  <div class="container">
-    <span class="section-label">Pricing</span>
-    <h2 style="text-align:center;">Simple, flat-rate pricing.<br/>No surprises.</h2>
-    <p class="section-intro" style="text-align:center; margin:0 auto 0;">
-      One-time setup + flat monthly. No per-user fees. No API costs. No busy-season spikes.
-    </p>
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <h3>Starter</h3>
-        <div class="price">$500 <span class="price-period">/mo</span></div>
-        <p class="price-note">+ $500 one-time setup</p>
-        <ul class="pricing-features">
-          <li><span class="ck">✓</span> Private AI on your hardware</li>
-          <li><span class="ck">✓</span> Tax research &amp; Q&amp;A</li>
-          <li><span class="ck">✓</span> Compliance memo drafts</li>
-          <li><span class="ck">✓</span> Up to 3 concurrent users</li>
-          <li><span class="ck">✓</span> Email support</li>
-        </ul>
-        <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Starter%20Plan%20Inquiry&body=Hi%2C%20I%27m%20interested%20in%20the%20Starter%20plan%20for%20my%20firm." class="btn-plan btn-plan-outline">Contact Sales</a>
-      </div>
-      <div class="pricing-card featured">
-        <div class="featured-badge">Most Popular</div>
-        <h3>Professional</h3>
-        <div class="price">$800 <span class="price-period">/mo</span></div>
-        <p class="price-note">+ $500 one-time setup</p>
-        <ul class="pricing-features">
-          <li><span class="ck">✓</span> Everything in Starter</li>
-          <li><span class="ck">✓</span> Document Q&amp;A on firm files</li>
-          <li><span class="ck">✓</span> IRS correspondence drafts</li>
-          <li><span class="ck">✓</span> Unlimited users</li>
-          <li><span class="ck">✓</span> Custom system prompts per role</li>
-          <li><span class="ck">✓</span> Priority support + monthly check-in</li>
-        </ul>
-        <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Professional%20Plan%20Inquiry&body=Hi%2C%20I%27m%20interested%20in%20the%20Professional%20plan%20for%20my%20firm." class="btn-plan btn-plan-accent">Contact Sales →</a>
-      </div>
-    </div>
-    <p style="text-align:center; color:var(--muted); font-size:0.85rem; margin-top:2rem;">
-      Not sure which fits your firm? <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Plan%20Question&body=Hi%2C%20I%27m%20not%20sure%20which%20plan%20fits%20my%20firm.%20Here%27s%20our%20situation%3A" style="color:var(--accent);">Email us and we'll tell you.</a>
-    </p>
-  </div>
-</section>
-
-<!-- CTA -->
+<!-- ── CTA ── -->
 <section class="cta-section">
   <div class="container">
-    <h2>Ready to see it running<br/>on your hardware?</h2>
-    <p>Tell us about your firm. We'll respond within one business day with exactly how Aethyro fits your workflow — no pressure, no pitch call required.</p>
+    <span class="sec-eyebrow">Early Access</span>
+    <h2>The Agentic AI Platform<br/>is open for <span class="grad-orange">business.</span></h2>
+    <p>List your product. Buy a dataset. Sponsor the feed. Deploy your first agent. Aethyro is where the local AI ecosystem converges.</p>
     <div class="cta-actions">
-      <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Sales%20Inquiry&body=Hi%2C%20I%27m%20interested%20in%20Aethyro%20for%20my%20firm.%20Here%27s%20a%20bit%20about%20our%20situation%3A" class="btn-primary">Contact Sales →</a>
-      <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Question&body=Hi%2C%20I%20have%20a%20question%20about%20Aethyro%3A" class="btn-secondary">Ask a Question</a>
+      <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Early%20Access" class="btn btn-lg btn-orange">Get Early Access →</a>
+      <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Partnership" class="btn btn-lg btn-ghost">Partner With Us</a>
     </div>
+    <p class="cta-note">// no sales call required · async-first · response within 24 hours</p>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ── FOOTER ── -->
 <footer>
-  <p>© 2026 Aethyro — Private AI for Accounting Firms</p>
-  <p style="margin-top:0.5rem;">
-    <a href="mailto:leer4030@gmail.com">leer4030@gmail.com</a>
-    &nbsp;·&nbsp;
-    <a href="mailto:leer4030@gmail.com?subject=Aethyro%20Sales%20Inquiry&body=Hi%2C%20I%27m%20interested%20in%20Aethyro%20for%20my%20firm.%20Here%27s%20a%20bit%20about%20our%20situation%3A">Contact Sales</a>
-  </p>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Aethyro<span class="footer-brand-dot">.</span></div>
+      <p class="footer-tagline">The Agentic AI Platform.<br/>Agents · Software · Research · Data · Sponsors</p>
+    </div>
+    <div class="footer-col">
+      <h4>Marketplace</h4>
+      <a href="#agents">Agent Marketplace</a>
+      <a href="#software">Software Products</a>
+      <a href="#data">Dataset Store</a>
+      <a href="mailto:leer4030@gmail.com?subject=List%20My%20Product">List Your Product</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="#research">AI Research Feed</a>
+      <a href="mailto:leer4030@gmail.com?subject=Newsletter">Weekly Newsletter</a>
+      <a href="#sponsors">Sponsor Program</a>
+      <a href="mailto:leer4030@gmail.com?subject=Press">Press</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="mailto:leer4030@gmail.com">Contact</a>
+      <a href="mailto:leer4030@gmail.com?subject=Early%20Access">Early Access</a>
+      <a href="mailto:leer4030@gmail.com?subject=Enterprise">Enterprise</a>
+      <a href="mailto:leer4030@gmail.com?subject=Partnership">Partnerships</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Aethyro · <a href="mailto:leer4030@gmail.com">leer4030@gmail.com</a></p>
+    <p>aethyro.com · Powered by SovereignNation</p>
+  </div>
 </footer>
 
+<script>
+  function copyIt(el, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      el.textContent = 'copied!'; el.style.color = 'var(--green)';
+      setTimeout(() => { el.textContent = 'copy'; el.style.color = ''; }, 1800);
+    });
+  }
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.filter-row').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+  function nlSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.nl-btn');
+    btn.textContent = '✓ Subscribed!'; btn.style.background = 'var(--green)';
+    const email = e.target.querySelector('.nl-input').value;
+    window.location.href = 'mailto:leer4030@gmail.com?subject=Newsletter+Signup+-+' + encodeURIComponent(email);
+    return false;
+  }
+</script>
 </body>
 </html>
