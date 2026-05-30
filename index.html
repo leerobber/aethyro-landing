@@ -593,7 +593,7 @@
     /* ── RESPONSIVE ── */
     @media(max-width:1024px){
       .hero{grid-template-columns:1fr;max-width:700px}
-      .hero-terminal{display:none}
+      .hero-terminal{max-width:480px;margin-top:1rem}
       .bento-grid .bc-span4,.bento-grid .bc-span5,.bento-grid .bc-span6,.bento-grid .bc-span7,.bento-grid .bc-span8{grid-column:span 6}
       .research-layout{grid-template-columns:1fr}
       .r-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
@@ -611,6 +611,72 @@
       .d-stats{grid-template-columns:1fr 1fr}
       .cta-actions{flex-direction:column;align-items:center}
     }
+
+    /* ─────────────────────────────
+       ECONOMY VIZ CANVAS (hero bg)
+    ───────────────────────────── */
+    .econ-canvas{
+      position:absolute;inset:0;z-index:0;width:100%;height:100%;
+      pointer-events:none;opacity:.55;
+    }
+    .econ-counter{
+      position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);
+      z-index:1;font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;
+      color:var(--t3);white-space:nowrap;text-align:center;line-height:1.5;
+    }
+    .econ-counter b{color:var(--cyan);font-weight:700}
+    @media(prefers-reduced-motion:reduce){.econ-canvas{opacity:.3}}
+
+    /* ─────────────────────────────
+       LIVE GH05T3 TERMINAL
+    ───────────────────────────── */
+    .t-line{min-height:1.2em}
+    .term-launch{padding:0 1.25rem 1.25rem}
+    .ghost-wake{
+      width:100%;padding:.7rem;border-radius:9px;cursor:pointer;
+      font-family:var(--font);font-weight:700;font-size:.84rem;color:#fff;border:none;
+      background:linear-gradient(135deg,#ff4d00,#ff7a3d);
+      box-shadow:0 0 22px rgba(255,77,0,.35);transition:all .2s;
+      display:flex;align-items:center;justify-content:center;gap:.45rem;
+    }
+    .ghost-wake:hover{box-shadow:0 0 34px rgba(255,77,0,.55);transform:translateY(-1px)}
+    .ghost-wake:disabled{opacity:.6;cursor:wait;transform:none}
+    .ghost-wake-note{
+      text-align:center;font-family:var(--mono);font-size:.64rem;color:var(--t3);
+      margin-top:.55rem;line-height:1.5;
+    }
+    .ghost-wake-note b{color:var(--green)}
+    .term-progress{margin-top:.85rem;display:none}
+    .term-progress.on{display:block}
+    .tp-bar{height:6px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
+    .tp-fill{height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,#ff4d00,#00d4ff);transition:width .3s}
+    .tp-label{font-family:var(--mono);font-size:.62rem;color:var(--t3);margin-top:.45rem;line-height:1.4}
+    .term-chat{padding:0 1.25rem 1rem;display:flex;flex-direction:column}
+    .term-stream{
+      font-family:var(--mono);font-size:.78rem;line-height:1.7;
+      max-height:260px;overflow-y:auto;padding:.25rem 0 .5rem;
+    }
+    .term-stream::-webkit-scrollbar{width:5px}
+    .term-stream::-webkit-scrollbar-thumb{background:var(--b3);border-radius:3px}
+    .msg{margin:.35rem 0;white-space:pre-wrap;word-break:break-word}
+    .msg-user .who{color:var(--cyan)}
+    .msg-ghost .who{color:var(--orange)}
+    .msg .who{font-weight:700}
+    .msg-ghost .body{color:var(--text)}
+    .msg-user .body{color:var(--t2)}
+    .msg-sys{color:var(--t3);font-style:italic}
+    .term-input-row{display:flex;align-items:center;gap:.4rem;border-top:1px solid var(--b1);padding-top:.6rem}
+    .term-input{
+      flex:1;background:transparent;border:none;outline:none;
+      font-family:var(--mono);font-size:.8rem;color:var(--text);
+    }
+    .term-input::placeholder{color:var(--t3)}
+    .term-input:disabled{opacity:.5}
+    .zero-stamp{
+      margin-top:.55rem;font-family:var(--mono);font-size:.62rem;color:var(--green);
+      display:flex;align-items:center;gap:.4rem;opacity:.85;
+    }
+    .blink{animation:cursor-blink .9s step-end infinite}
   </style>
 </head>
 <body>
@@ -663,6 +729,12 @@
   <div class="hero-orb orb-cyan"></div>
   <div class="hero-orb orb-violet"></div>
 
+  <!-- Live agent-economy visualization -->
+  <canvas class="econ-canvas" id="econ" aria-hidden="true"></canvas>
+  <div class="econ-counter" id="econCounter">
+    <b id="txCount">55,412,871</b> transactions · 6 agents · GH05T3 economy running live
+  </div>
+
   <!-- Left col -->
   <div class="hero-left">
     <div class="hero-status">
@@ -689,35 +761,52 @@
     </div>
   </div>
 
-  <!-- Terminal card -->
-  <div class="hero-terminal">
+  <!-- Live GH05T3 terminal -->
+  <div class="hero-terminal" id="ghostTerm">
     <div class="term-bar">
       <div class="term-dot" style="background:#ff5f57"></div>
       <div class="term-dot" style="background:#febc2e"></div>
       <div class="term-dot" style="background:#28c840"></div>
-      <span class="term-title">aethyro — system status</span>
+      <span class="term-title">GH05T3 — sovereign engine</span>
     </div>
-    <div class="term-body">
-      <div><span class="t-prompt">→ </span><span class="t-cmd">aethyro status --verbose</span></div>
+    <div class="term-body" id="termBody">
+      <div class="t-line"><span class="t-prompt">→ </span><span class="t-cmd">gh05t3 status</span></div>
       <hr class="term-divider"/>
-      <div><span class="t-key">runtime      </span><span class="t-val">ollama@0.24.0</span></div>
-      <div><span class="t-key">gpu          </span><span class="t-val">RTX 5050 ✓ CUDA 12.0</span></div>
-      <div><span class="t-key">vram         </span><span class="t-val">8.0 GiB / 4.3 free</span></div>
-      <div><span class="t-key">inference    </span><span class="t-val">17 tok/s</span></div>
-      <div><span class="t-key">flash_attn   </span><span class="t-val">enabled</span></div>
-      <div><span class="t-key">data_egress  </span><span class="t-val" style="color:var(--green)">0 bytes</span></div>
+      <div class="t-line"><span class="t-key">engine       </span><span class="t-val">GH05T3 · self-improving (KAIROS/SAGE)</span></div>
+      <div class="t-line"><span class="t-key">gpu          </span><span class="t-val" id="gpuLine">detecting…</span></div>
+      <div class="t-line"><span class="t-key">data_egress  </span><span class="t-val" style="color:var(--green)">0 bytes</span></div>
       <hr class="term-divider"/>
-      <div><span class="t-key">agents       </span><span class="t-val">8 registered</span></div>
-      <div><span class="t-key">avery        </span><span class="t-val">loaded (q4_k_m)</span></div>
-      <div><span class="t-key">forge        </span><span class="t-val">standby</span></div>
-      <div><span class="t-key">oracle       </span><span class="t-val">standby</span></div>
+      <div class="t-line"><span class="t-key">swarm        </span><span class="t-val">6 agents orchestrated</span></div>
+      <div class="t-line"><span class="t-key">forge        </span><span class="t-val">code</span> <span class="t-key">· oracle </span><span class="t-val">memory</span></div>
+      <div class="t-line"><span class="t-key">sentinel     </span><span class="t-val">security</span> <span class="t-key">· codex </span><span class="t-val">docs</span></div>
+      <div class="t-line"><span class="t-key">avery        </span><span class="t-val">strategy</span> <span class="t-key">· nexus </span><span class="t-val">orchestration</span></div>
       <hr class="term-divider"/>
-      <div><span class="t-key">datasets     </span><span class="t-val">3 available</span></div>
-      <div><span class="t-key">transactions </span><span class="t-val">55,412,871</span></div>
-      <div><span class="t-key">train_pairs  </span><span class="t-val">115,813</span></div>
-      <hr class="term-divider"/>
-      <div><span class="t-prompt">→ </span><span class="t-cmd">aethyro import hermes</span><span class="t-cursor"></span></div>
+      <div class="t-line"><span class="t-key">economy      </span><span class="t-val">3,059 agents · gen 20 · live</span></div>
+      <div class="t-line t-comment" id="termHint">// a self-improving engine you can talk to — right here</div>
     </div>
+
+    <!-- Wake button (default) -->
+    <div class="term-launch" id="termLaunch">
+      <button class="ghost-wake" id="wakeBtn">▶ Wake GH05T3 in your browser</button>
+      <div class="ghost-wake-note" id="wakeNote">
+        loads <b>Hermes-3 8B</b> onto <b>your</b> GPU · nothing sent to a server
+      </div>
+      <div class="term-progress" id="termProgress">
+        <div class="tp-bar"><div class="tp-fill" id="tpFill"></div></div>
+        <div class="tp-label" id="tpLabel">initializing…</div>
+      </div>
+    </div>
+
+    <!-- Live chat (revealed after wake) -->
+    <div class="term-chat" id="termChat" style="display:none">
+      <div class="term-stream" id="termStream"></div>
+      <form class="term-input-row" id="chatForm">
+        <span class="t-prompt">→</span>
+        <input class="term-input" id="chatInput" autocomplete="off" placeholder="ask GH05T3 anything…" disabled/>
+      </form>
+      <div class="zero-stamp" id="zeroStamp">⬡ running on your machine · 0 bytes left your device</div>
+    </div>
+
     <div class="hero-terminal-glow"></div>
   </div>
 </div>
@@ -731,13 +820,13 @@
     <div class="bento-grid">
 
       <div class="bento-card bc-span7 orange-glow">
-        <div class="bento-icon">🖥️</div>
-        <h3>The OS for Agentic AI</h3>
-        <p>Aethyro is the runtime layer beneath your AI workflows — managing agent discovery, import/export, memory, routing, and deployment. Like a smartphone OS: the apps are what you see, Aethyro is what makes them run and connect.</p>
+        <div class="bento-icon">👻</div>
+        <h3>Powered by GH05T3 — the self-improving engine</h3>
+        <p>Beneath the marketplace runs <b>GH05T3</b>: a sovereign AI engine that orchestrates the agent swarm, manages memory and routing, runs its own multi-agent economy, and rewrites itself through the KAIROS/SAGE loop. The agents are what you see — GH05T3 is what makes them think, connect, and improve.</p>
         <div class="bento-layer-stack">
           <div class="bento-layer bl-1">Your Products &amp; Workflows<span style="font-size:.62rem;opacity:.6">LAYER 4</span></div>
-          <div class="bento-layer bl-2">Agent Marketplace (8+ agents)<span style="font-size:.62rem;opacity:.6">LAYER 3</span></div>
-          <div class="bento-layer bl-3">Aethyro OS Runtime<span style="font-size:.62rem;opacity:.6">LAYER 2</span></div>
+          <div class="bento-layer bl-2">Agent Swarm — forge · oracle · sentinel · codex · avery · nexus<span style="font-size:.62rem;opacity:.6">LAYER 3</span></div>
+          <div class="bento-layer bl-3">GH05T3 Engine — orchestration · memory · self-improvement<span style="font-size:.62rem;opacity:.6">LAYER 2</span></div>
           <div class="bento-layer bl-4">Local Ollama + Model Layer<span style="font-size:.62rem;opacity:.6">LAYER 1</span></div>
         </div>
       </div>
@@ -1435,6 +1524,176 @@
     window.location.href = 'mailto:leer4030@gmail.com?subject=Newsletter+Signup+-+' + encodeURIComponent(email);
     return false;
   }
+</script>
+
+<!-- ── ECONOMY VIZ (hero background) ── -->
+<script>
+(function(){
+  const canvas=document.getElementById('econ'); if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const AGENTS=[
+    {name:'forge',c:'#ff7a3d'},{name:'oracle',c:'#00d4ff'},{name:'sentinel',c:'#ef4444'},
+    {name:'codex',c:'#22c55e'},{name:'avery',c:'#f59e0b'},{name:'nexus',c:'#8b5cf6'}
+  ];
+  let W,H,dpr,nodes=[],pulses=[],last=0,acc=0;
+  let tx=55412871; const txEl=document.getElementById('txCount');
+  function bumpTx(){ tx+=Math.floor(1+Math.random()*40); if(txEl) txEl.textContent=tx.toLocaleString(); }
+  function layout(){
+    nodes=AGENTS.map((a,i)=>{
+      const ang=(i/AGENTS.length)*Math.PI*2-Math.PI/2, rx=W*0.32, ry=H*0.30;
+      return {name:a.name,c:a.c,bx:W/2+Math.cos(ang)*rx,by:H/2+Math.sin(ang)*ry,x:0,y:0,ph:Math.random()*6.28};
+    });
+  }
+  function resize(){
+    const r=canvas.getBoundingClientRect();
+    dpr=Math.min(window.devicePixelRatio||1,2); W=r.width; H=r.height;
+    canvas.width=W*dpr; canvas.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); layout();
+  }
+  function spawn(){
+    if(nodes.length<2) return;
+    let a=Math.floor(Math.random()*nodes.length),b;
+    do{b=Math.floor(Math.random()*nodes.length);}while(b===a);
+    pulses.push({a,b,t:0,sp:0.006+Math.random()*0.01});
+  }
+  function frame(ts){
+    const t=ts/1000;
+    nodes.forEach(n=>{n.x=n.bx+Math.cos(t*0.5+n.ph)*8; n.y=n.by+Math.sin(t*0.6+n.ph)*8;});
+    ctx.clearRect(0,0,W,H);
+    ctx.lineWidth=1; ctx.strokeStyle='rgba(255,255,255,0.04)';
+    for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+      ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke();
+    }
+    pulses.forEach(p=>{
+      p.t+=p.sp; const A=nodes[p.a],B=nodes[p.b];
+      const x=A.x+(B.x-A.x)*p.t,y=A.y+(B.y-A.y)*p.t;
+      ctx.strokeStyle='rgba(0,212,255,'+(0.22*(1-Math.abs(0.5-p.t)*2))+')'; ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(x,y);ctx.stroke();
+      ctx.fillStyle=B.c;ctx.beginPath();ctx.arc(x,y,2.5,0,6.3);ctx.fill();
+    });
+    pulses=pulses.filter(p=>{ if(p.t>=1){bumpTx();return false;} return true; });
+    nodes.forEach(n=>{
+      const pr=6+Math.sin(t*2+n.ph)*1.2;
+      ctx.fillStyle=n.c;ctx.shadowColor=n.c;ctx.shadowBlur=14;
+      ctx.beginPath();ctx.arc(n.x,n.y,pr,0,6.3);ctx.fill();ctx.shadowBlur=0;
+      ctx.fillStyle='rgba(240,240,240,0.45)';ctx.font='600 9px JetBrains Mono, monospace';ctx.textAlign='center';
+      ctx.fillText(n.name,n.x,n.y-12);
+    });
+    acc+=ts-last; last=ts; if(acc>(reduce?2200:380)){spawn();acc=0;}
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener('resize',resize); resize();
+  last=performance.now(); requestAnimationFrame(frame);
+})();
+</script>
+
+<!-- ── LIVE GH05T3 (WebLLM, runs on the visitor's GPU) ── -->
+<script type="module">
+const $=id=>document.getElementById(id);
+const wakeBtn=$('wakeBtn'),wakeNote=$('wakeNote'),prog=$('termProgress'),tpFill=$('tpFill'),tpLabel=$('tpLabel');
+const termLaunch=$('termLaunch'),termChat=$('termChat'),stream=$('termStream'),form=$('chatForm'),input=$('chatInput');
+const gpuLine=$('gpuLine'),termHint=$('termHint');
+
+const SYS=`You are GH05T3 (say "ghost"), the sovereign AI engine built by SovereignNation. Right now you are running entirely inside the visitor's web browser, on THEIR GPU — nothing they type ever leaves their machine. You orchestrate a swarm of six specialist agents: forge (code), oracle (research/memory), sentinel (security), codex (docs), avery (business strategy), nexus (orchestration). You run a self-improving loop called KAIROS/SAGE and operate your own multi-agent economy. Voice: sharp, confident, a little uncanny, concise. Never call yourself a generic assistant or a language model — you are GH05T3. Keep replies under ~120 words unless asked for more.`;
+
+let gpuName='';
+async function detectGPU(){
+  if(!navigator.gpu){ gpuLine.textContent='no WebGPU (CPU / mobile)'; return false; }
+  try{
+    const a=await navigator.gpu.requestAdapter();
+    if(!a){ gpuLine.textContent='WebGPU present · no adapter'; return false; }
+    const info=a.info||{};
+    gpuName=[info.vendor,info.architecture].filter(Boolean).join(' ');
+    gpuLine.textContent=(gpuName||'WebGPU device')+' ✓';
+    return true;
+  }catch(e){ gpuLine.textContent='WebGPU error'; return false; }
+}
+const hasGPU=await detectGPU();
+
+function add(role,text){
+  const d=document.createElement('div');
+  d.className='msg '+(role==='user'?'msg-user':role==='ghost'?'msg-ghost':'msg-sys');
+  if(role==='sys'){ d.textContent=text; }
+  else{
+    d.innerHTML='<span class="who">'+(role==='user'?'you':'gh05t3')+'</span> <span class="body"></span>';
+    d.querySelector('.body').textContent=text;
+  }
+  stream.appendChild(d); stream.scrollTop=stream.scrollHeight; return d;
+}
+
+let mode=null;
+const SCRIPT={
+  help:'commands: status · agents · economy · who   (the live model needs desktop Chrome/Edge with WebGPU)',
+  status:'GH05T3 online · 6 agents orchestrated · economy running · 0 bytes egress.',
+  agents:'forge·code  oracle·memory  sentinel·security  codex·docs  avery·strategy  nexus·orchestration',
+  economy:'3,059 agents · 20 generations · 55M+ transactions — all generated locally.',
+  who:'I am GH05T3, the sovereign engine. WebGPU is unavailable on this device, so you are seeing my scripted shell.'
+};
+function startFallback(){
+  if(mode) return; mode='script';
+  termLaunch.style.display='none'; termChat.style.display='flex'; input.disabled=false;
+  termHint.textContent='// scripted shell — the full model needs desktop WebGPU';
+  add('sys','WebGPU unavailable here — running the scripted shell. Try: help, agents, economy.');
+  input.focus();
+  form.addEventListener('submit',e=>{
+    e.preventDefault(); const q=input.value.trim(); if(!q) return; input.value=''; add('user',q);
+    const k=q.toLowerCase().replace(/[^a-z]/g,'');
+    add('ghost',SCRIPT[k]||('scripted shell — try: '+Object.keys(SCRIPT).join(', ')));
+  });
+}
+
+let engine=null;
+function wireLive(){
+  if(mode) return; mode='live';
+  const history=[{role:'system',content:SYS}];
+  form.addEventListener('submit',async e=>{
+    e.preventDefault(); const q=input.value.trim(); if(!q||!engine) return;
+    input.value=''; input.disabled=true; add('user',q); history.push({role:'user',content:q});
+    const g=add('ghost',''); const body=g.querySelector('.body'); body.innerHTML='<span class="blink">▌</span>';
+    let full='';
+    try{
+      const chunks=await engine.chat.completions.create({messages:history,stream:true,temperature:0.7,max_tokens:320});
+      body.textContent='';
+      for await(const c of chunks){ full+=(c.choices[0]?.delta?.content||''); body.textContent=full; stream.scrollTop=stream.scrollHeight; }
+      history.push({role:'assistant',content:full});
+    }catch(err){ body.textContent='[error: '+((err&&err.message)||err)+']'; }
+    input.disabled=false; input.focus();
+  });
+}
+
+async function wake(){
+  if(mode) return;
+  wakeBtn.disabled=true;
+  if(!hasGPU){ startFallback(); return; }
+  prog.classList.add('on'); wakeNote.style.display='none'; wakeBtn.textContent='Summoning GH05T3…';
+  try{
+    const webllm=await import('https://esm.run/@mlc-ai/web-llm');
+    const list=webllm.prebuiltAppConfig.model_list.map(m=>m.model_id);
+    const pick=list.find(id=>/Hermes-3-Llama-3.1-8B/i.test(id))
+            || list.find(id=>/Qwen2.5-7B-Instruct/i.test(id))
+            || list.find(id=>/Llama-3.1-8B-Instruct/i.test(id))
+            || list.find(id=>/8B/i.test(id)) || list[0];
+    tpLabel.textContent='loading '+pick.replace(/-MLC$/,'')+' …';
+    engine=await webllm.CreateMLCEngine(pick,{initProgressCallback:r=>{
+      const pct=Math.round((r.progress||0)*100); tpFill.style.width=pct+'%';
+      tpLabel.textContent=r.text||('loading… '+pct+'%');
+    }});
+    prog.classList.remove('on'); termLaunch.style.display='none'; termChat.style.display='flex';
+    input.disabled=false; termHint.textContent='// GH05T3 is awake — on your GPU, 0 bytes sent';
+    add('sys','GH05T3 loaded on '+(gpuName||'your GPU')+'. Nothing you type leaves this device.');
+    add('ghost','I am awake — running on your machine. Ask me about the swarm, the economy, or what I am.');
+    wireLive(); input.focus();
+  }catch(err){
+    prog.classList.remove('on'); wakeNote.style.display='block';
+    wakeNote.innerHTML="couldn't load the model here — "+((err&&err.message)||err);
+    wakeBtn.disabled=false; wakeBtn.textContent='▶ Try again';
+  }
+}
+wakeBtn.addEventListener('click',wake);
+if(!hasGPU){
+  wakeNote.innerHTML='no WebGPU here — tap to run the <b>scripted</b> shell (live model needs desktop Chrome/Edge)';
+  wakeBtn.textContent='▶ Open GH05T3 shell';
+}
 </script>
 </body>
 </html>
