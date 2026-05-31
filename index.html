@@ -667,6 +667,59 @@
     .cat-card h3{font-size:1rem;color:var(--white);font-weight:700}
     .cat-card p{font-size:.8rem;color:var(--t2);line-height:1.5;flex:1}
     .cat-meta{display:flex;align-items:center;justify-content:space-between;margin-top:.4rem}
+    /* fix: category cards are <a> — kill default link underline/blue */
+    .cat-card{text-decoration:none;color:inherit}
+    .cat-card:hover{text-decoration:none}
+    /* ── avery scripted demo ── */
+    .demo{max-width:760px;margin:2rem auto 0;background:var(--s2);border:1px solid var(--b2);border-radius:16px;overflow:hidden}
+    .demo-bar{display:flex;align-items:center;gap:.5rem;padding:.7rem 1rem;background:var(--b1);border-bottom:1px solid var(--b2);font-family:var(--mono);font-size:.72rem;color:var(--t3)}
+    .demo-dot{width:9px;height:9px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange)}
+    .demo-body{padding:1.25rem;min-height:210px;display:flex;flex-direction:column;gap:.7rem}
+    .demo-msg{max-width:88%;padding:.6rem .85rem;border-radius:12px;font-size:.85rem;line-height:1.55}
+    .demo-q{align-self:flex-end;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.2);color:var(--text)}
+    .demo-a{align-self:flex-start;background:rgba(255,77,0,.06);border:1px solid rgba(255,77,0,.15);color:var(--t2);white-space:pre-wrap}
+    .demo-a .who{display:block;font-family:var(--mono);font-size:.58rem;color:var(--orange);margin-bottom:.25rem;text-transform:uppercase;letter-spacing:.06em}
+    .chips{display:flex;flex-wrap:wrap;gap:.5rem;padding:0 1.25rem 1.25rem}
+    .chip{padding:.45rem .8rem;border:1px solid var(--b2);border-radius:100px;background:transparent;color:var(--t2);font-size:.78rem;cursor:pointer;font-family:var(--font);transition:all .15s}
+    .chip:hover{border-color:var(--orange);color:var(--orange);background:rgba(255,77,0,.06)}
+    .demo-cur{display:inline-block;width:7px;height:13px;background:var(--orange);vertical-align:middle;animation:cursor-blink .9s step-end infinite}
+    .demo-note{text-align:center;font-family:var(--mono);font-size:.6rem;color:var(--t3);padding-bottom:1rem}
+    /* ── configurator ── */
+    .cfg{max-width:840px;margin:2rem auto 0;display:grid;grid-template-columns:1fr 300px;gap:1.5rem}
+    @media(max-width:760px){.cfg{grid-template-columns:1fr}}
+    .cfg-opt{display:flex;align-items:center;gap:.7rem;background:var(--s2);border:1px solid var(--b1);border-radius:10px;padding:.75rem 1rem;cursor:pointer;transition:all .15s;margin-bottom:.55rem}
+    .cfg-opt:hover{border-color:var(--b3)}
+    .cfg-opt.on{border-color:var(--orange);background:rgba(255,77,0,.06)}
+    .cfg-opt input{accent-color:var(--orange);width:18px;height:18px;flex-shrink:0}
+    .cfg-opt .t{font-weight:600;font-size:.88rem;color:var(--text)}
+    .cfg-opt .d{font-size:.73rem;color:var(--t3)}
+    .cfg-out{background:var(--s2);border:1px solid var(--b2);border-radius:14px;padding:1.5rem;align-self:start}
+    .cfg-out .lbl{font-family:var(--mono);font-size:.64rem;color:var(--t3);text-transform:uppercase;letter-spacing:.07em}
+    .cfg-out .plan{font-size:1.4rem;font-weight:800;color:var(--white);margin:.2rem 0}
+    .cfg-out .price{font-family:var(--mono);font-size:2rem;font-weight:800;letter-spacing:-1px;color:var(--orange)}
+    .cfg-out .price span{font-size:.8rem;color:var(--t2);font-weight:400}
+    .cfg-out ul{list-style:none;margin:.7rem 0 1rem}
+    .cfg-out li{font-size:.8rem;color:var(--t2);padding:.18rem 0}
+    /* ── economy viz ── */
+    .viz-wrap{position:relative;height:340px;margin-top:2rem;border:1px solid var(--b1);border-radius:16px;overflow:hidden;background:#060607}
+    .viz-canvas{position:absolute;inset:0;width:100%;height:100%}
+    .viz-counter{position:absolute;bottom:1rem;left:0;right:0;text-align:center;font-family:var(--mono);font-size:.7rem;color:var(--t3);z-index:1}
+    .viz-counter b{color:var(--cyan)}
+    /* ── benchmarks / model guide ── */
+    .bench{max-width:840px;margin:2rem auto 0;border:1px solid var(--b1);border-radius:14px;overflow-x:auto}
+    .bench table{width:100%;border-collapse:collapse;font-size:.84rem;min-width:520px}
+    .bench th,.bench td{padding:.7rem 1rem;text-align:left;border-bottom:1px solid var(--b1)}
+    .bench th{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);background:rgba(255,255,255,.02)}
+    .bench td{color:var(--t2)}
+    .bench tr:last-child td{border-bottom:none}
+    .bench .mono{font-family:var(--mono);color:var(--text)}
+    /* ── prompt packs ── */
+    .pack{background:var(--s2);border:1px solid var(--b1);border-radius:14px;padding:1.4rem;display:flex;flex-direction:column;gap:.6rem}
+    .pack h3{font-size:1rem;color:var(--white);font-weight:700}
+    .pack p{font-size:.8rem;color:var(--t2);line-height:1.5}
+    .pack-prompt{background:rgba(0,0,0,.4);border:1px solid var(--b2);border-radius:9px;padding:.7rem .85rem;font-family:var(--mono);font-size:.74rem;color:var(--cyan);line-height:1.5;position:relative}
+    .pack-copy{position:absolute;top:.5rem;right:.5rem;font-size:.6rem;color:var(--t3);cursor:pointer;background:rgba(255,255,255,.05);border:1px solid var(--b1);border-radius:4px;padding:.15rem .4rem;font-family:var(--font)}
+    .pack-copy:hover{color:var(--text)}
   </style>
 </head>
 <body>
@@ -1092,6 +1145,29 @@ Add seats only at the team tier.</div>
   </div>
 </section>
 
+<div class="divider"></div>
+
+<!-- ── TALK TO AVERY (scripted demo) ── -->
+<section class="marketplace-section" id="demo">
+  <div class="container">
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">Try it</span>
+        <h2>Talk to <span class="grad-orange">avery.</span></h2>
+        <p class="sec-sub" style="margin-top:.5rem">A taste of your sovereign business strategist. Tap a question — in the real product this runs entirely on your hardware.</p>
+      </div>
+    </div>
+    <div class="demo">
+      <div class="demo-bar"><span class="demo-dot"></span> avery · sovereign strategist <span style="margin-left:auto">local · 0 bytes sent</span></div>
+      <div class="demo-body" id="demoBody">
+        <div class="demo-msg demo-a"><span class="who">avery</span>Ask me about strategy, pricing, or going to market. Tap a question below.</div>
+      </div>
+      <div class="chips" id="demoChips"></div>
+      <div class="demo-note">// scripted preview · the live product answers from a local model on your machine</div>
+    </div>
+  </div>
+</section>
+
 <!-- ── ECOSYSTEM (third-party, honest) ── -->
 <section class="marketplace-section" id="ecosystem">
   <div class="container">
@@ -1280,6 +1356,37 @@ Add seats only at the team tier.</div>
 
 <div class="divider"></div>
 
+<div class="divider"></div>
+
+<!-- ── BUILD YOUR STACK (configurator) ── -->
+<section class="marketplace-section" id="configure">
+  <div class="container">
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">Build your stack</span>
+        <h2>Tell us what you need.<br/><span class="grad-cyan">We'll pick your plan.</span></h2>
+        <p class="sec-sub" style="margin-top:.5rem">Check what matters — we'll recommend the right Aethyro plan and price. All plans include the full agent swarm.</p>
+      </div>
+    </div>
+    <div class="cfg">
+      <div class="cfg-opts" id="cfgOpts">
+        <label class="cfg-opt"><input type="checkbox" data-need="code"><span><span class="t">Write &amp; review code</span><br><span class="d">forge + sentinel + codex</span></span></label>
+        <label class="cfg-opt"><input type="checkbox" data-need="research"><span><span class="t">Research over my documents</span><br><span class="d">oracle RAG + citations</span></span></label>
+        <label class="cfg-opt"><input type="checkbox" data-need="team"><span><span class="t">A team will use it (2–5 people)</span><br><span class="d">shared, multi-seat</span></span></label>
+        <label class="cfg-opt"><input type="checkbox" data-need="cpa"><span><span class="t">Accounting / tax firm</span><br><span class="d">client-data-safe, IRS-grounded</span></span></label>
+        <label class="cfg-opt"><input type="checkbox" data-need="solo"><span><span class="t">Just me / everyday assistant</span><br><span class="d">solopreneur, personal use</span></span></label>
+      </div>
+      <div class="cfg-out">
+        <div class="lbl">Recommended plan</div>
+        <div class="plan" id="cfgPlan">Aethyro Personal</div>
+        <div class="price" id="cfgPrice">$29<span>/mo</span></div>
+        <ul id="cfgFeat"><li>✓ All 6 sovereign agents</li><li>✓ 100% local · zero egress</li><li>✓ 14-day free trial</li></ul>
+        <a href="/app/signup.html" class="btn btn-orange" style="width:100%">Start free trial →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ── MARKETPLACE CATEGORIES ── -->
 <section class="marketplace-section" id="marketplace">
   <div class="container">
@@ -1297,6 +1404,44 @@ Add seats only at the team tier.</div>
       <a href="#data" class="cat-card"><div class="cat-ico">🧩</div><h3>Snippets &amp; Recipes</h3><p>Modelfiles, quantization recipes, RAG configs — the building blocks for local deployment.</p><div class="cat-meta"><span class="badge b-violet">Open</span><span class="r-link">Explore →</span></div></a>
       <a href="#engine" class="cat-card"><div class="cat-ico">📦</div><h3>Agent Bundles</h3><p>Signed <code>.aethyro</code> packages — model + memory + skills + config. One-command deploy.</p><div class="cat-meta"><span class="badge b-gold">New</span><span class="r-link">Learn more →</span></div></a>
       <a href="#data" class="cat-card"><div class="cat-ico">🏛️</div><h3>Datasets</h3><p>Rare training data from a live agent economy. SFT/RLHF/DPO ready, on HuggingFace.</p><div class="cat-meta"><span class="badge b-green">Live</span><span class="r-link">Browse →</span></div></a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── PROMPT PACKS (real, free with trial) ── -->
+<section class="marketplace-section" id="prompts">
+  <div class="container">
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">Prompt Packs</span>
+        <h2>Steal our <span class="grad-orange">best prompts.</span></h2>
+        <p class="sec-sub" style="margin-top:.5rem">Curated, role-specific prompts that get the most out of each agent. Copy one, or get the full packs free with any trial.</p>
+      </div>
+      <a href="/app/signup.html" class="btn btn-sm btn-orange">Unlock all packs →</a>
+    </div>
+    <div class="agents-grid">
+      <div class="pack">
+        <h3>⚒️ forge — Code Review Pack</h3>
+        <p>Turn forge into a senior reviewer. 12 prompts; here's the headline one.</p>
+        <div class="pack-prompt"><span class="pack-copy" data-copy="Review this diff like a staff engineer. Flag correctness bugs first, then security, then style. For each: file:line, severity, why it matters, and the exact fix. Be terse.">copy</span>Review this diff like a staff engineer. Flag correctness bugs first, then security, then style. For each: file:line, severity, why, and the exact fix. Be terse.</div>
+      </div>
+      <div class="pack">
+        <h3>🔮 oracle — Document Q&amp;A Pack</h3>
+        <p>Precise, cited answers over your files. 10 prompts; sample below.</p>
+        <div class="pack-prompt"><span class="pack-copy" data-copy="Answer ONLY from the provided documents. Cite each claim as (file, page/section). If the answer isn't in the docs, say so explicitly. End with a 1-line confidence note.">copy</span>Answer ONLY from the provided documents. Cite each claim as (file, page/section). If it isn't in the docs, say so. End with a 1-line confidence note.</div>
+      </div>
+      <div class="pack">
+        <h3>🎯 avery — Strategy Pack</h3>
+        <p>KAIROS-framework planning prompts for founders. 8 prompts; sample below.</p>
+        <div class="pack-prompt"><span class="pack-copy" data-copy="Using the KAIROS framework (Kickoff, Align, Implement, Refine, Optimize, Scale), build a 90-day plan for: [GOAL]. For each phase give 2-3 concrete actions and the single metric that proves it worked.">copy</span>Using KAIROS (Kickoff, Align, Implement, Refine, Optimize, Scale), build a 90-day plan for [GOAL]. Per phase: 2–3 actions + the one metric that proves it worked.</div>
+      </div>
+      <div class="pack">
+        <h3>🛡️ sentinel — Security Audit Pack</h3>
+        <p>OWASP/CWE-grounded review prompts. 9 prompts; sample below.</p>
+        <div class="pack-prompt"><span class="pack-copy" data-copy="Audit this code against the OWASP Top 10. For each finding: vulnerability name + CWE id, severity (low/med/high/critical), the vulnerable line, and a concrete remediation with a code example.">copy</span>Audit this code against the OWASP Top 10. Per finding: name + CWE id, severity, the vulnerable line, and a concrete fix with code.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1354,6 +1499,54 @@ Add seats only at the team tier.</div>
 </section>
 
 <div class="divider"></div>
+
+<div class="divider"></div>
+
+<!-- ── ECONOMY VISUALIZATION ── -->
+<section class="marketplace-section" id="economy">
+  <div class="container">
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">Under the hood</span>
+        <h2>A live <span class="grad-mix">agent economy.</span></h2>
+        <p class="sec-sub" style="margin-top:.5rem">GH05T3 runs its own multi-agent economy — agents negotiate, trade, and specialize. The data it generates is what we publish as datasets.</p>
+      </div>
+    </div>
+    <div class="viz-wrap">
+      <canvas class="viz-canvas" id="viz" aria-hidden="true"></canvas>
+      <div class="viz-counter"><b id="vizTx">0</b> simulated transactions · 6 agents negotiating</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── LOCAL MODEL GUIDE / BENCHMARKS ── -->
+<section class="marketplace-section" id="benchmarks">
+  <div class="container">
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">Local model guide</span>
+        <h2>What runs on <span class="grad-cyan">your GPU.</span></h2>
+        <p class="sec-sub" style="margin-top:.5rem">A quick reference for picking a local model by VRAM. Exact tokens/sec depend on your hardware — full benchmarks ship in the Pro newsletter.</p>
+      </div>
+    </div>
+    <div class="bench">
+      <table>
+        <thead><tr><th>Model class</th><th>Params</th><th>VRAM (Q4)</th><th>Good for</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Small</td><td>0.5–1.5B</td><td>~1–2&nbsp;GB</td><td>fast chat, classification, drafts</td></tr>
+          <tr><td class="mono">Mid</td><td>3B</td><td>~2–3&nbsp;GB</td><td>everyday assistant (Avery's class)</td></tr>
+          <tr><td class="mono">Standard</td><td>7–8B</td><td>~5–6&nbsp;GB</td><td>coding, reasoning, function-calling</td></tr>
+          <tr><td class="mono">MoE</td><td>30B (3B active)</td><td>~6–8&nbsp;GB</td><td>GPT-4-class reasoning on 8GB cards</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="text-align:center;margin-top:1.5rem">
+      <a href="/app/signup.html" class="btn btn-ghost">Get real tok/s benchmarks in the newsletter →</a>
+    </div>
+  </div>
+</section>
 
 <!-- ── COMMUNITY ── -->
 <section class="cta-section" id="community" style="padding:5.5rem 1.5rem">
@@ -1454,6 +1647,79 @@ Add seats only at the team tier.</div>
       document.getElementById('saveYr').textContent=fmt(save*12);
     }
     cq.addEventListener('input',update); cr.addEventListener('input',update); update();
+  })();
+
+  // ── avery scripted demo ──
+  (function(){
+    var body=document.getElementById('demoBody'), chipsEl=document.getElementById('demoChips');
+    if(!body||!chipsEl) return;
+    var QA=[
+      ["What is GH05T3?","GH05T3 is the engine under Aethyro — it orchestrates the agent swarm, keeps long-term memory, and improves itself through the KAIROS/SAGE loop. All of it runs on your hardware."],
+      ["Is my data safe?","By architecture, yes. Inference runs locally — zero data egress. Nothing you ask ever leaves your machine, which is exactly why regulated firms can use it."],
+      ["How should I price my product?","Go flat — not per-seat or per-token. Your compute cost is fixed, buyers fear metered AI bills, and \"unlimited, $0/query\" is your differentiator. Add seats only at the team tier."],
+      ["Give me a 90-day GTM plan.","KAIROS:\n• Kickoff — pick ONE vertical\n• Align — lead with \"can't leak data\"\n• Implement — get the trial->paid funnel live\n• Refine — 5 design-partner calls\n• Optimize — double down on the best channel\n• Scale — case studies, then paid ads"],
+      ["Why local instead of cloud?","Three reasons: privacy (data never leaves), cost (no per-call bills), control (works offline, no lock-in). For some firms it isn't a preference — it's a legal requirement."]
+    ];
+    var busy=false;
+    function add(cls,html){var d=document.createElement('div');d.className='demo-msg '+cls;d.innerHTML=html;body.appendChild(d);body.scrollTop=body.scrollHeight;return d;}
+    function type(el,text,done){el.innerHTML='<span class="who">avery</span><span class="tx"></span><span class="demo-cur"></span>';var t=el.querySelector('.tx'),i=0;
+      (function step(){if(i<=text.length){t.textContent=text.slice(0,i++);body.scrollTop=body.scrollHeight;setTimeout(step,12);}else{var c=el.querySelector('.demo-cur');if(c)c.remove();if(done)done();}})();}
+    QA.forEach(function(qa){var b=document.createElement('button');b.className='chip';b.textContent=qa[0];
+      b.onclick=function(){if(busy)return;busy=true;add('demo-q',qa[0]);var a=add('demo-a','');type(a,qa[1],function(){busy=false;});};
+      chipsEl.appendChild(b);});
+  })();
+
+  // ── build-your-stack configurator ──
+  (function(){
+    var opts=document.querySelectorAll('#cfgOpts input'); if(!opts.length) return;
+    var PLAN={
+      personal:{n:'Aethyro Personal',p:'$29',per:'/mo',f:['✓ All 6 sovereign agents','✓ Local knowledge base & memory','✓ 14-day free trial']},
+      research:{n:'Aethyro Research',p:'$199',per:'/mo',f:['✓ oracle RAG + citations','✓ Air-gapped & privilege-safe','✓ Unlimited documents']},
+      dev:{n:'Aethyro Dev',p:'$299',per:'/mo · up to 5 devs',f:['✓ forge + sentinel + codex + nexus','✓ Multi-agent orchestration','✓ Up to 5 seats']},
+      cpa:{n:'Aethyro CPA',p:'$499',per:'/mo',f:['✓ IRS-grounded tax research','✓ Zero client-data egress','✓ Document Q&A on firm files']}
+    };
+    function pick(){
+      var s={}; opts.forEach(function(o){s[o.dataset.need]=o.checked;o.closest('.cfg-opt').classList.toggle('on',o.checked);});
+      var key = s.cpa ? 'cpa' : (s.team||s.code) ? 'dev' : s.research ? 'research' : 'personal';
+      var p=PLAN[key];
+      document.getElementById('cfgPlan').textContent=p.n;
+      document.getElementById('cfgPrice').innerHTML=p.p+'<span>'+p.per+'</span>';
+      document.getElementById('cfgFeat').innerHTML=p.f.map(function(x){return '<li>'+x+'</li>';}).join('');
+    }
+    opts.forEach(function(o){o.addEventListener('change',pick);}); pick();
+  })();
+
+  // ── prompt pack copy buttons ──
+  document.querySelectorAll('.pack-copy').forEach(function(el){
+    el.addEventListener('click',function(){
+      navigator.clipboard.writeText(el.getAttribute('data-copy')).then(function(){
+        var o=el.textContent; el.textContent='copied!'; el.style.color='var(--green)';
+        setTimeout(function(){el.textContent=o;el.style.color='';},1500);
+      });
+    });
+  });
+
+  // ── economy visualization ──
+  (function(){
+    var c=document.getElementById('viz'); if(!c) return;
+    var ctx=c.getContext('2d'), reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var AG=[['forge','#ff7a3d'],['oracle','#00d4ff'],['sentinel','#ef4444'],['codex','#22c55e'],['avery','#f59e0b'],['nexus','#8b5cf6']];
+    var W,H,dpr,nodes=[],pulses=[],last=0,acc=0,tx=0,txEl=document.getElementById('vizTx');
+    function layout(){nodes=AG.map(function(a,i){var ang=(i/AG.length)*6.283-1.57,rx=W*0.34,ry=H*0.32;return{name:a[0],c:a[1],bx:W/2+Math.cos(ang)*rx,by:H/2+Math.sin(ang)*ry,x:0,y:0,ph:Math.random()*6.28};});}
+    function resize(){var r=c.getBoundingClientRect();dpr=Math.min(window.devicePixelRatio||1,2);W=r.width;H=r.height;c.width=W*dpr;c.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);layout();}
+    function spawn(){if(nodes.length<2)return;var a=Math.floor(Math.random()*nodes.length),b;do{b=Math.floor(Math.random()*nodes.length);}while(b===a);pulses.push({a:a,b:b,t:0,sp:0.006+Math.random()*0.012});}
+    function frame(ts){var t=ts/1000;
+      nodes.forEach(function(n){n.x=n.bx+Math.cos(t*0.5+n.ph)*8;n.y=n.by+Math.sin(t*0.6+n.ph)*8;});
+      ctx.clearRect(0,0,W,H);ctx.lineWidth=1;ctx.strokeStyle='rgba(255,255,255,0.05)';
+      for(var i=0;i<nodes.length;i++)for(var j=i+1;j<nodes.length;j++){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke();}
+      pulses.forEach(function(p){p.t+=p.sp;var A=nodes[p.a],B=nodes[p.b],x=A.x+(B.x-A.x)*p.t,y=A.y+(B.y-A.y)*p.t;
+        ctx.strokeStyle='rgba(0,212,255,'+(0.25*(1-Math.abs(0.5-p.t)*2))+')';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(x,y);ctx.stroke();
+        ctx.fillStyle=B.c;ctx.beginPath();ctx.arc(x,y,2.6,0,6.3);ctx.fill();});
+      pulses=pulses.filter(function(p){if(p.t>=1){tx+=Math.floor(1+Math.random()*30);if(txEl)txEl.textContent=tx.toLocaleString();return false;}return true;});
+      nodes.forEach(function(n){var pr=6+Math.sin(t*2+n.ph)*1.3;ctx.fillStyle=n.c;ctx.shadowColor=n.c;ctx.shadowBlur=14;ctx.beginPath();ctx.arc(n.x,n.y,pr,0,6.3);ctx.fill();ctx.shadowBlur=0;
+        ctx.fillStyle='rgba(240,240,240,.55)';ctx.font='600 10px JetBrains Mono, monospace';ctx.textAlign='center';ctx.fillText(n.name,n.x,n.y-12);});
+      acc+=ts-last;last=ts;if(acc>(reduce?2200:340)){spawn();acc=0;}requestAnimationFrame(frame);}
+    window.addEventListener('resize',resize);resize();last=performance.now();requestAnimationFrame(frame);
   })();
 
   document.querySelectorAll('a[href^="#"]').forEach(a => {
