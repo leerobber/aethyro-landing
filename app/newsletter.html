@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Aethyro Dispatch — Newsletter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./style.css"/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+<style>
+  .nl-wrap{max-width:720px;margin:0 auto;padding:2.5rem 1.25rem}
+  .nl-sub{background:var(--s2);border:1px solid var(--b2);border-radius:14px;padding:1.4rem;margin:1.5rem 0 2rem}
+  .nl-sub .row{display:flex;gap:.6rem}.nl-sub input{flex:1}
+  .issue{display:block;background:var(--s2);border:1px solid var(--b1);border-radius:14px;padding:1.3rem 1.5rem;margin-bottom:.7rem;text-decoration:none;color:inherit;transition:border-color .15s}
+  .issue:hover{border-color:var(--b2)}
+  .issue .it{font-weight:700;color:var(--text);font-size:1.02rem}
+  .issue .is{color:var(--t2);font-size:.85rem;margin-top:.3rem;line-height:1.5}
+  .issue .im{font-family:var(--mono);font-size:.64rem;color:var(--t3);margin-top:.5rem;display:flex;gap:.7rem;align-items:center}
+  .lock{color:#fcd34d;border:1px solid rgba(245,158,11,.3);background:rgba(245,158,11,.08);border-radius:5px;padding:.1rem .4rem;text-transform:uppercase;letter-spacing:.05em}
+  .issue-body{background:var(--s2);border:1px solid var(--b1);border-radius:14px;padding:2rem;white-space:pre-wrap;color:var(--text);line-height:1.75;font-size:.95rem}
+  .gate{background:rgba(245,158,11,.06);border:1px dashed rgba(245,158,11,.3);border-radius:14px;padding:2rem;text-align:center}
+</style>
+</head>
+<body>
+<div class="nl-wrap">
+  <div class="topbar">
+    <a href="/" class="brand" style="margin:0"><span class="dot"></span> Aethyro</a>
+    <a href="/app/login.html" class="btn btn-ghost" style="width:auto;margin:0;padding:.5rem 1rem">Log in</a>
+  </div>
+  <div id="loading" class="loading">loading…</div>
+  <div id="view" style="display:none"></div>
+</div>
+
+<script src="./vendor/supabase.js"></script>
+<script src="./config.js"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  function fail(m){var l=$('loading');if(l){l.innerHTML='⚠ '+m;l.style.color='#fca5a5';}}
+  setTimeout(function(){ if($('view').style.display==='none') fail('timed out — reload'); },12000);
+  if(!window.AETHYRO){ fail(window.AETHYRO_LOADERR||'failed to load'); return; }
+  var sb=window.AETHYRO.supabase, view=$('view');
+  var esc=function(s){var d=document.createElement('div');d.textContent=s==null?'':s;return d.innerHTML;};
+  var when=function(t){return new Date(t).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});};
+  function show(){ $('loading').style.display='none'; view.style.display='block'; }
+
+  (async function(){
+    try{
+      var slug=new URLSearchParams(location.search).get('i');
+      if(slug) await openIssue(slug); else await listIssues();
+      show();
+    }catch(e){ fail((e&&e.message)||String(e)); }
+  })();
+
+  async function listIssues(){
+    var r=await sb.rpc('newsletter_index'); if(r.error) throw r.error;
+    var html='<h1>The Aethyro Dispatch</h1><p class="sub">Local-AI news, benchmarks, and build guides — for people running AI on their own hardware.</p>';
+    html+='<div class="nl-sub"><div style="font-weight:700;margin-bottom:.5rem">Get it free, every week</div>'
+      +'<div class="row"><input id="nlEmail" type="email" placeholder="you@email.com"/><button class="btn" id="nlJoin" style="width:auto;margin:0">Subscribe</button></div>'
+      +'<div class="msg" id="nlMsg"></div>'
+      +'<p class="note" style="margin-top:.6rem">Free issues are public. Subscriber issues (deep benchmarks, build guides) are included with any <a href="/app/signup.html">trial or plan</a>.</p></div>';
+    (r.data||[]).forEach(function(it){
+      html+='<a class="issue" href="?i='+encodeURIComponent(it.slug)+'"><div class="it">'+esc(it.title)+'</div><div class="is">'+esc(it.summary||'')+'</div>'
+        +'<div class="im"><span>'+when(it.published_at)+'</span>'+(it.is_premium?'<span class="lock">subscriber</span>':'<span>free</span>')+'</div></a>';
+    });
+    view.innerHTML=html;
+    $('nlJoin').onclick=async function(){
+      var em=$('nlEmail').value.trim(), m=$('nlMsg');
+      if(!em||em.indexOf('@')<1){ m.className='msg show err'; m.textContent='Enter a valid email.'; return; }
+      var ins=await sb.from('newsletter_signups').upsert({email:em},{onConflict:'email'});
+      if(ins.error){ m.className='msg show err'; m.textContent=ins.error.message; return; }
+      m.className='msg show ok'; m.textContent='✓ Subscribed — welcome to the Dispatch.'; $('nlEmail').value='';
+    };
+  }
+
+  async function openIssue(slug){
+    var idx=await sb.rpc('newsletter_index'); var meta=(idx.data||[]).filter(function(x){return x.slug===slug;})[0];
+    var r=await sb.from('newsletter_issues').select('title,body,is_premium,published_at').eq('slug',slug).maybeSingle();
+    var html='<a href="/app/newsletter.html" style="font-size:.8rem">← all issues</a>';
+    if(r.data){
+      html+='<h1 style="margin-top:.7rem">'+esc(r.data.title)+'</h1><p class="sub">'+when(r.data.published_at)+(r.data.is_premium?' · subscriber issue':' · free')+'</p>';
+      html+='<div class="issue-body">'+esc(r.data.body)+'</div>';
+    } else if(meta){
+      html+='<h1 style="margin-top:.7rem">'+esc(meta.title)+'</h1><p class="sub">'+when(meta.published_at)+' · subscriber issue</p>';
+      html+='<div class="issue-body" style="opacity:.7">'+esc(meta.summary||'')+'</div>';
+      html+='<div class="gate" style="margin-top:1rem"><div style="font-weight:700;font-size:1.05rem">🔒 Subscriber issue</div><p class="muted" style="margin:.6rem 0 1rem">Included with any Aethyro trial or plan. Start a 14-day free trial — no card — to read it.</p><a href="/app/signup.html" class="btn btn-orange" style="width:auto">Start free trial →</a></div>';
+    } else {
+      html+='<p class="muted" style="margin-top:1rem">Issue not found.</p>';
+    }
+    view.innerHTML=html;
+  }
+})();
+</script>
+</body>
+</html>
