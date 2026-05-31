@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard — Aethyro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./style.css"/>
+</head>
+<body>
+<div class="dash-wrap">
+  <div class="topbar">
+    <a href="/" class="brand" style="margin:0"><span class="dot"></span> Aethyro</a>
+    <button class="btn btn-ghost" id="signout" style="width:auto;margin:0;padding:.5rem 1rem">Sign out</button>
+  </div>
+
+  <div id="loading" class="loading">loading your account…</div>
+
+  <div id="content" style="display:none">
+    <h1>Your account</h1>
+    <p class="sub" id="email"></p>
+    <div class="grid" style="margin-top:1.5rem">
+      <div class="panel">
+        <h2>Plan</h2>
+        <div class="stat" id="planName">—</div>
+        <div style="margin-top:.6rem"><span class="pill" id="statusPill">—</span></div>
+      </div>
+      <div class="panel">
+        <h2 id="timeLabel">Trial</h2>
+        <div class="stat"><span id="daysLeft">—</span> <span class="muted" style="font-size:1rem">days left</span></div>
+        <div class="muted" id="renewLine" style="margin-top:.6rem"></div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:1rem">
+      <h2>Upgrade</h2>
+      <p class="muted">Pick a plan to keep access when your trial ends.</p>
+      <div class="plans" id="plans"></div>
+      <div class="msg" id="upmsg"></div>
+    </div>
+    <div class="panel" style="margin-top:1rem">
+      <h2>Your devices</h2>
+      <div class="devices" id="devices"><p class="muted">No devices activated yet. The local GH05T3 app registers here when you install it.</p></div>
+    </div>
+    <p class="note">// inference runs on your hardware · this dashboard only manages your account, trial, and license</p>
+  </div>
+</div>
+
+<script src="./vendor/supabase.js"></script>
+<script src="./config.js"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var done=false;
+  function fail(m){ if(done) return; var l=$('loading'); if(l){ l.innerHTML='⚠ '+m+'<br><span style="font-size:.8rem;color:var(--t3)">reload to retry</span>'; l.style.color='#fca5a5'; } }
+  // watchdog: never hang silently
+  setTimeout(function(){ if(!done && $('content').style.display==='none') fail('timed out reaching the server (network/firewall?)'); }, 12000);
+
+  if(!window.AETHYRO){ fail(window.AETHYRO_LOADERR||'app library failed to load'); return; }
+  var supabase=window.AETHYRO.supabase, PLANS=window.AETHYRO.PLANS;
+
+  function daysUntil(ts){ if(!ts) return null; return Math.max(0, Math.ceil((new Date(ts)-Date.now())/86400000)); }
+
+  (async function(){
+    try{
+      var s=await supabase.auth.getSession();
+      if(s.error) throw s.error;
+      var session=s.data && s.data.session;
+      if(!session){ location.replace('./login.html'); return; }
+      var user=session.user;
+      $('email').textContent=user.email;
+
+      var subRes=await supabase.from('subscriptions').select('*').limit(1);
+      if(subRes.error) throw subRes.error;
+      var sub=subRes.data && subRes.data[0];
+      var licRes=await supabase.from('licenses').select('*').order('issued_at',{ascending:false});
+      var lic=licRes.data||[];
+
+      if(sub){
+        var planLabel=(PLANS[sub.plan]&&PLANS[sub.plan].label)||(sub.plan==='trial'?'Free trial':sub.plan);
+        $('planName').textContent=planLabel;
+        var pill=$('statusPill'); pill.textContent=sub.status; pill.className='pill '+sub.status;
+        if(sub.status==='trialing'){
+          $('timeLabel').textContent='Trial';
+          $('daysLeft').textContent=daysUntil(sub.trial_ends_at)!=null?daysUntil(sub.trial_ends_at):'—';
+          $('renewLine').textContent='Trial ends '+(sub.trial_ends_at?new Date(sub.trial_ends_at).toLocaleDateString():'');
+        } else if(sub.status==='active'){
+          $('timeLabel').textContent='Renews in';
+          $('daysLeft').textContent=daysUntil(sub.current_period_end)!=null?daysUntil(sub.current_period_end):'—';
+          $('renewLine').textContent=sub.current_period_end?'Renews '+new Date(sub.current_period_end).toLocaleDateString():'';
+        } else {
+          $('timeLabel').textContent='Status'; $('daysLeft').textContent='0'; $('renewLine').textContent='Upgrade to restore access.';
+        }
+      } else {
+        $('planName').textContent='No subscription'; $('renewLine').textContent='';
+      }
+
+      if(lic.length){
+        $('devices').innerHTML=lic.map(function(l){
+          return '<div class="device"><span>'+(l.device_label||l.device_fingerprint.slice(0,12)+'…')+'</span><span class="muted">'+l.status+' · exp '+new Date(l.expires_at).toLocaleDateString()+'</span></div>';
+        }).join('');
+      }
+
+      var plansEl=$('plans');
+      Object.keys(PLANS).forEach(function(key){
+        var p=PLANS[key], el=document.createElement('div'); el.className='plan';
+        el.innerHTML='<div class="pn">'+p.label+'</div><div class="pp">'+p.price+'</div>';
+        el.onclick=async function(){
+          var um=$('upmsg'); um.className='msg show'; um.style.background='rgba(255,255,255,.05)'; um.textContent='Starting checkout…';
+          try{
+            var r=await supabase.functions.invoke('create-checkout',{ body:{ plan:key } });
+            if(r.error) throw r.error;
+            if(r.data && r.data.url){ location.href=r.data.url; return; }
+            throw new Error('no checkout url');
+          }catch(err){ um.className='msg show err'; um.textContent='Checkout error: '+((err&&err.message)||err); }
+        };
+        plansEl.appendChild(el);
+      });
+
+      $('signout').onclick=async function(){ await supabase.auth.signOut(); location.href='./login.html'; };
+
+      done=true;
+      $('loading').style.display='none';
+      $('content').style.display='block';
+    }catch(err){ fail((err&&err.message)||String(err)); }
+  })();
+})();
+</script>
+</body>
+</html>

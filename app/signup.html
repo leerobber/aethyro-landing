@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sign up — Aethyro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./style.css"/>
+</head>
+<body>
+<div class="wrap">
+  <a href="/" class="brand"><span class="dot"></span> Aethyro</a>
+  <div class="card">
+    <h1>Start your free trial</h1>
+    <p class="sub">14 days, full access, no credit card. Your AI runs on your hardware.</p>
+    <form id="form">
+      <label for="email">Work email</label>
+      <input id="email" type="email" required placeholder="you@company.com" autocomplete="email"/>
+      <label for="password">Password</label>
+      <input id="password" type="password" required minlength="8" placeholder="at least 8 characters" autocomplete="new-password"/>
+      <button class="btn" id="submit" type="submit">Create account &amp; start trial →</button>
+    </form>
+    <div class="msg" id="msg"></div>
+    <p class="alt">Already have an account? <a href="./login.html">Log in</a></p>
+  </div>
+  <p class="note">// signup creates a 14-day trial automatically · inference stays 100% local</p>
+</div>
+<script src="./vendor/supabase.js"></script>
+<script src="./config.js"></script>
+<script>
+(function(){
+  var msg=document.getElementById('msg'), btn=document.getElementById('submit'), form=document.getElementById('form');
+  function show(t,kind){ msg.textContent=t; msg.className='msg show '+kind; }
+  if(!window.AETHYRO){ show(window.AETHYRO_LOADERR||'app failed to load','err'); return; }
+  var supabase=window.AETHYRO.supabase;
+  form.addEventListener('submit', async function(e){
+    e.preventDefault(); btn.disabled=true; btn.textContent='Creating…'; msg.className='msg';
+    var email=document.getElementById('email').value.trim();
+    var password=document.getElementById('password').value;
+    try{
+      var r=await supabase.auth.signUp({ email:email, password:password });
+      if(r.error){ show(r.error.message,'err'); btn.disabled=false; btn.textContent='Create account & start trial →'; return; }
+      if(r.data && r.data.session){ location.href='./dashboard.html'; return; }
+      show('Account created. Check your email to confirm, then log in.','ok'); btn.textContent='Check your email ✓';
+    }catch(err){ show((err&&err.message)||String(err),'err'); btn.disabled=false; btn.textContent='Create account & start trial →'; }
+  });
+})();
+</script>
+</body>
+</html>
