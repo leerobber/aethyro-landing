@@ -18,9 +18,8 @@
   <div id="loading" class="loading">loading your account…</div>
 
   <div id="content" style="display:none">
-    <h1 id="hello">Your account</h1>
+    <h1>Your account</h1>
     <p class="sub" id="email"></p>
-
     <div class="grid" style="margin-top:1.5rem">
       <div class="panel">
         <h2>Plan</h2>
@@ -33,91 +32,99 @@
         <div class="muted" id="renewLine" style="margin-top:.6rem"></div>
       </div>
     </div>
-
     <div class="panel" style="margin-top:1rem">
       <h2>Upgrade</h2>
       <p class="muted">Pick a plan to keep access when your trial ends.</p>
       <div class="plans" id="plans"></div>
       <div class="msg" id="upmsg"></div>
     </div>
-
     <div class="panel" style="margin-top:1rem">
       <h2>Your devices</h2>
       <div class="devices" id="devices"><p class="muted">No devices activated yet. The local GH05T3 app registers here when you install it.</p></div>
     </div>
-
     <p class="note">// inference runs on your hardware · this dashboard only manages your account, trial, and license</p>
   </div>
 </div>
 
-<script type="module">
-import { supabase, PLANS } from "./config.js";
+<script src="./vendor/supabase.js"></script>
+<script src="./config.js"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var done=false;
+  function fail(m){ if(done) return; var l=$('loading'); if(l){ l.innerHTML='⚠ '+m+'<br><span style="font-size:.8rem;color:var(--t3)">reload to retry</span>'; l.style.color='#fca5a5'; } }
+  // watchdog: never hang silently
+  setTimeout(function(){ if(!done && $('content').style.display==='none') fail('timed out reaching the server (network/firewall?)'); }, 12000);
 
-const $=id=>document.getElementById(id);
+  if(!window.AETHYRO){ fail(window.AETHYRO_LOADERR||'app library failed to load'); return; }
+  var supabase=window.AETHYRO.supabase, PLANS=window.AETHYRO.PLANS;
 
-const { data:{ session } } = await supabase.auth.getSession();
-if(!session){ location.href='./login.html'; }
+  function daysUntil(ts){ if(!ts) return null; return Math.max(0, Math.ceil((new Date(ts)-Date.now())/86400000)); }
 
-const user = session.user;
-$('email').textContent = user.email;
-
-// fetch subscription + licenses (RLS returns only this user's rows)
-const [{ data: subs }, { data: lic }] = await Promise.all([
-  supabase.from('subscriptions').select('*').limit(1),
-  supabase.from('licenses').select('*').order('issued_at',{ascending:false})
-]);
-const sub = subs && subs[0];
-
-function daysUntil(ts){ if(!ts) return null; return Math.max(0, Math.ceil((new Date(ts)-Date.now())/86400000)); }
-
-if(sub){
-  const planLabel = (PLANS[sub.plan] && PLANS[sub.plan].label) || (sub.plan==='trial'?'Free trial':sub.plan);
-  $('planName').textContent = planLabel;
-  const pill=$('statusPill'); pill.textContent=sub.status; pill.className='pill '+sub.status;
-  if(sub.status==='trialing'){
-    $('timeLabel').textContent='Trial';
-    $('daysLeft').textContent = daysUntil(sub.trial_ends_at) ?? '—';
-    $('renewLine').textContent = 'Trial ends '+new Date(sub.trial_ends_at).toLocaleDateString();
-  } else if(sub.status==='active'){
-    $('timeLabel').textContent='Renews in';
-    $('daysLeft').textContent = daysUntil(sub.current_period_end) ?? '—';
-    $('renewLine').textContent = sub.current_period_end ? 'Renews '+new Date(sub.current_period_end).toLocaleDateString() : '';
-  } else {
-    $('timeLabel').textContent='Status';
-    $('daysLeft').textContent = '0';
-    $('renewLine').textContent = 'Upgrade to restore access.';
-  }
-}
-
-// devices
-if(lic && lic.length){
-  $('devices').innerHTML = lic.map(l=>`<div class="device"><span>${l.device_label||l.device_fingerprint.slice(0,12)+'…'}</span><span class="muted">${l.status} · exp ${new Date(l.expires_at).toLocaleDateString()}</span></div>`).join('');
-}
-
-// plan buttons -> create-checkout edge function (active once Stripe keys are added)
-const plansEl=$('plans');
-Object.entries(PLANS).forEach(([key,p])=>{
-  const el=document.createElement('div'); el.className='plan';
-  el.innerHTML=`<div class="pn">${p.label}</div><div class="pp">${p.price}</div>`;
-  el.onclick=async()=>{
-    const um=$('upmsg'); um.className='msg show'; um.style.background='rgba(255,255,255,.05)'; um.textContent='Starting checkout…';
+  (async function(){
     try{
-      const { data, error } = await supabase.functions.invoke('create-checkout',{ body:{ plan:key } });
-      if(error) throw error;
-      if(data && data.url){ location.href=data.url; return; }
-      throw new Error('no checkout url');
-    }catch(err){
-      um.className='msg show err';
-      um.textContent='Checkout isn’t live yet — Stripe keys still need to be added to the backend.';
-    }
-  };
-  plansEl.appendChild(el);
-});
+      var s=await supabase.auth.getSession();
+      if(s.error) throw s.error;
+      var session=s.data && s.data.session;
+      if(!session){ location.replace('./login.html'); return; }
+      var user=session.user;
+      $('email').textContent=user.email;
 
-$('signout').onclick=async()=>{ await supabase.auth.signOut(); location.href='./login.html'; };
+      var subRes=await supabase.from('subscriptions').select('*').limit(1);
+      if(subRes.error) throw subRes.error;
+      var sub=subRes.data && subRes.data[0];
+      var licRes=await supabase.from('licenses').select('*').order('issued_at',{ascending:false});
+      var lic=licRes.data||[];
 
-$('loading').style.display='none';
-$('content').style.display='block';
+      if(sub){
+        var planLabel=(PLANS[sub.plan]&&PLANS[sub.plan].label)||(sub.plan==='trial'?'Free trial':sub.plan);
+        $('planName').textContent=planLabel;
+        var pill=$('statusPill'); pill.textContent=sub.status; pill.className='pill '+sub.status;
+        if(sub.status==='trialing'){
+          $('timeLabel').textContent='Trial';
+          $('daysLeft').textContent=daysUntil(sub.trial_ends_at)!=null?daysUntil(sub.trial_ends_at):'—';
+          $('renewLine').textContent='Trial ends '+(sub.trial_ends_at?new Date(sub.trial_ends_at).toLocaleDateString():'');
+        } else if(sub.status==='active'){
+          $('timeLabel').textContent='Renews in';
+          $('daysLeft').textContent=daysUntil(sub.current_period_end)!=null?daysUntil(sub.current_period_end):'—';
+          $('renewLine').textContent=sub.current_period_end?'Renews '+new Date(sub.current_period_end).toLocaleDateString():'';
+        } else {
+          $('timeLabel').textContent='Status'; $('daysLeft').textContent='0'; $('renewLine').textContent='Upgrade to restore access.';
+        }
+      } else {
+        $('planName').textContent='No subscription'; $('renewLine').textContent='';
+      }
+
+      if(lic.length){
+        $('devices').innerHTML=lic.map(function(l){
+          return '<div class="device"><span>'+(l.device_label||l.device_fingerprint.slice(0,12)+'…')+'</span><span class="muted">'+l.status+' · exp '+new Date(l.expires_at).toLocaleDateString()+'</span></div>';
+        }).join('');
+      }
+
+      var plansEl=$('plans');
+      Object.keys(PLANS).forEach(function(key){
+        var p=PLANS[key], el=document.createElement('div'); el.className='plan';
+        el.innerHTML='<div class="pn">'+p.label+'</div><div class="pp">'+p.price+'</div>';
+        el.onclick=async function(){
+          var um=$('upmsg'); um.className='msg show'; um.style.background='rgba(255,255,255,.05)'; um.textContent='Starting checkout…';
+          try{
+            var r=await supabase.functions.invoke('create-checkout',{ body:{ plan:key } });
+            if(r.error) throw r.error;
+            if(r.data && r.data.url){ location.href=r.data.url; return; }
+            throw new Error('no checkout url');
+          }catch(err){ um.className='msg show err'; um.textContent='Checkout error: '+((err&&err.message)||err); }
+        };
+        plansEl.appendChild(el);
+      });
+
+      $('signout').onclick=async function(){ await supabase.auth.signOut(); location.href='./login.html'; };
+
+      done=true;
+      $('loading').style.display='none';
+      $('content').style.display='block';
+    }catch(err){ fail((err&&err.message)||String(err)); }
+  })();
+})();
 </script>
 </body>
 </html>

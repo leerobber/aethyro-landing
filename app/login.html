@@ -25,19 +25,26 @@
     <p class="alt">No account yet? <a href="./signup.html">Start a free trial</a></p>
   </div>
 </div>
-<script type="module">
-import { supabase } from "./config.js";
-const form=document.getElementById('form'), btn=document.getElementById('submit'), msg=document.getElementById('msg');
-// already logged in? go to dashboard
-(async()=>{ const { data:{session} } = await supabase.auth.getSession(); if(session) location.href='./dashboard.html'; })();
-form.addEventListener('submit', async e=>{
-  e.preventDefault(); btn.disabled=true; btn.textContent='Logging in…'; msg.className='msg';
-  const email=document.getElementById('email').value.trim();
-  const password=document.getElementById('password').value;
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if(error){ msg.textContent=error.message; msg.className='msg show err'; btn.disabled=false; btn.textContent='Log in →'; return; }
-  location.href='./dashboard.html';
-});
+<script src="./vendor/supabase.js"></script>
+<script src="./config.js"></script>
+<script>
+(function(){
+  var msg=document.getElementById('msg'), btn=document.getElementById('submit'), form=document.getElementById('form');
+  function show(t){ msg.textContent=t; msg.className='msg show err'; }
+  if(!window.AETHYRO){ show(window.AETHYRO_LOADERR||'app failed to load'); return; }
+  var supabase=window.AETHYRO.supabase;
+  supabase.auth.getSession().then(function(r){ if(r.data && r.data.session) location.href='./dashboard.html'; });
+  form.addEventListener('submit', async function(e){
+    e.preventDefault(); btn.disabled=true; btn.textContent='Logging in…'; msg.className='msg';
+    var email=document.getElementById('email').value.trim();
+    var password=document.getElementById('password').value;
+    try{
+      var r=await supabase.auth.signInWithPassword({ email:email, password:password });
+      if(r.error){ show(r.error.message); btn.disabled=false; btn.textContent='Log in →'; return; }
+      location.href='./dashboard.html';
+    }catch(err){ show((err&&err.message)||String(err)); btn.disabled=false; btn.textContent='Log in →'; }
+  });
+})();
 </script>
 </body>
 </html>
