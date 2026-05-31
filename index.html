@@ -655,6 +655,7 @@
       <a href="#software" class="nav-link">Products</a>
       <a href="#ecosystem" class="nav-link">Ecosystem</a>
       <a href="#data"     class="nav-link">Datasets</a>
+      <a href="#community" class="nav-link">Community</a>
     </div>
     <div class="nav-right">
       <a href="/app/login.html" class="nav-link">Log in</a>
@@ -1057,6 +1058,21 @@
   </div>
 </section>
 
+<div class="divider"></div>
+
+<!-- ── COMMUNITY ── -->
+<section class="cta-section" id="community" style="padding:5.5rem 1.5rem">
+  <div class="container">
+    <span class="sec-eyebrow">Community</span>
+    <h2>Build local AI <span class="grad-cyan">together.</span></h2>
+    <p>Join other Aethyro users to get help, share setups &amp; benchmarks, and talk private/local AI. Founders included — early members shape the roadmap.</p>
+    <div class="cta-actions">
+      <a class="btn btn-lg btn-orange" data-community href="#">Join the community →</a>
+    </div>
+    <p class="cta-note">// real people running local AI · be an early member</p>
+  </div>
+</section>
+
 <!-- ── CTA ── -->
 <section class="cta-section">
   <div class="container">
@@ -1091,6 +1107,7 @@
       <a href="/app/login.html">Log in</a>
       <a href="/app/dashboard.html">Dashboard</a>
       <a href="#ecosystem">Ecosystem</a>
+      <a data-community href="#">Community</a>
     </div>
     <div class="footer-col">
       <h4>Company</h4>
@@ -1106,6 +1123,9 @@
 </footer>
 
 <script>
+  // TODO: paste your Discord (or Slack) invite here — one line powers every Community link.
+  const COMMUNITY_URL = "mailto:leer4030@gmail.com?subject=Aethyro%20Community%20-%20request%20invite";
+  document.querySelectorAll('[data-community]').forEach(a => { a.href = COMMUNITY_URL; });
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       const el = document.getElementById(a.getAttribute('href').slice(1));
