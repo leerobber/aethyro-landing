@@ -25,6 +25,7 @@
         <h2>Plan</h2>
         <div class="stat" id="planName">—</div>
         <div style="margin-top:.6rem"><span class="pill" id="statusPill">—</span></div>
+        <button class="btn btn-ghost" id="manageBtn" style="width:auto;margin-top:1rem;padding:.5rem 1rem;display:none">Manage subscription →</button>
       </div>
       <div class="panel">
         <h2 id="timeLabel">Trial</h2>
@@ -119,6 +120,12 @@
 
       $('signout').onclick=async function(){ await supabase.auth.signOut(); location.href='./login.html'; };
 
+      $('manageBtn').style.display='inline-flex';
+      $('manageBtn').onclick=async function(){
+        $('manageBtn').textContent='Opening…';
+        try{ var r=await supabase.functions.invoke('customer-portal',{body:{}}); if(r.error) throw r.error; if(r.data&&r.data.url){ location.href=r.data.url; return; } throw new Error('no url'); }
+        catch(err){ var um=$('upmsg'); um.className='msg show err'; um.textContent='Billing: '+((err&&err.message)||err); $('manageBtn').textContent='Manage subscription →'; }
+      };
       done=true;
       $('loading').style.display='none';
       $('content').style.display='block';
