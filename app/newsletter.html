@@ -68,8 +68,8 @@
     $('nlJoin').onclick=async function(){
       var em=$('nlEmail').value.trim(), m=$('nlMsg');
       if(!em||em.indexOf('@')<1){ m.className='msg show err'; m.textContent='Enter a valid email.'; return; }
-      var ins=await sb.from('newsletter_signups').upsert({email:em},{onConflict:'email'});
-      if(ins.error){ m.className='msg show err'; m.textContent=ins.error.message; return; }
+      var ins=await sb.from('newsletter_signups').insert({email:em});
+      if(ins.error && ins.error.code!=='23505'){ m.className='msg show err'; m.textContent=ins.error.message; return; }
       m.className='msg show ok'; m.textContent='✓ Subscribed — welcome to the Dispatch.'; $('nlEmail').value='';
     };
   }
