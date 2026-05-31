@@ -621,6 +621,52 @@
       .d-stats{grid-template-columns:1fr 1fr}
       .cta-actions{flex-direction:column;align-items:center}
     }
+    /* ── tabs / explorer ── */
+    .tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.5rem}
+    .tab{padding:.5rem 1rem;border:1px solid var(--b1);background:transparent;color:var(--t2);border-radius:100px;font-weight:600;font-size:.82rem;cursor:pointer;font-family:var(--font);transition:all .15s}
+    .tab:hover{color:var(--text);border-color:var(--b2)}
+    .tab.active{background:rgba(255,77,0,.1);border-color:var(--orange);color:var(--orange)}
+    .tab-panel{display:none}
+    .tab-panel.active{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1rem}
+    .io-card{background:var(--s2);border:1px solid var(--b1);border-radius:14px;padding:1.4rem;display:flex;flex-direction:column;gap:.7rem}
+    .io-role{font-family:var(--mono);font-size:.68rem;color:var(--orange);text-transform:uppercase;letter-spacing:.08em}
+    .io-in,.io-out{border-radius:9px;padding:.7rem .85rem;font-size:.82rem;line-height:1.55}
+    .io-in{background:rgba(0,0,0,.4);border:1px solid var(--b2);color:var(--text)}
+    .io-out{background:rgba(255,77,0,.04);border:1px solid rgba(255,77,0,.15);color:var(--t2);white-space:pre-wrap;font-family:var(--mono);font-size:.76rem}
+    .io-in .lbl,.io-out .lbl{display:block;font-family:var(--mono);font-size:.6rem;color:var(--t3);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.07em}
+    .io-note{font-family:var(--mono);font-size:.58rem;color:var(--t3)}
+    /* ── calculator ── */
+    .calc{background:var(--s2);border:1px solid var(--b1);border-radius:16px;padding:2rem;max-width:780px;margin:2.5rem auto 0}
+    .calc-row{display:flex;align-items:center;gap:1rem;margin:.9rem 0;font-size:.85rem;color:var(--t2)}
+    .calc-row label{flex:1}
+    .calc-row input[type=range]{flex:1.4;accent-color:var(--orange)}
+    .calc-val{font-family:var(--mono);font-weight:700;color:var(--white);min-width:8ch;text-align:right}
+    .calc-result{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem}
+    .calc-box{background:rgba(0,0,0,.3);border:1px solid var(--b1);border-radius:12px;padding:1.25rem;text-align:center}
+    .calc-box.win{border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.06)}
+    .calc-box .big{font-family:var(--mono);font-size:1.9rem;font-weight:800;letter-spacing:-1px}
+    .calc-box .lbl{font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-top:.3rem}
+    .calc-save{text-align:center;margin-top:1.4rem;font-size:1.05rem;color:var(--t2)}
+    .calc-save b{color:var(--green);font-family:var(--mono)}
+    .calc-note{text-align:center;font-family:var(--mono);font-size:.6rem;color:var(--t3);margin-top:.75rem;line-height:1.5}
+    /* ── team / personas ── */
+    .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:1rem;margin-top:2rem}
+    .team-card{background:var(--s2);border:1px solid var(--b1);border-radius:16px;padding:1.6rem;transition:border-color .2s,transform .15s}
+    .team-card:hover{border-color:var(--b2);transform:translateY(-3px)}
+    .team-avatar{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:.9rem}
+    .team-name{font-weight:800;color:var(--white);font-size:1.02rem}
+    .team-role{font-family:var(--mono);font-size:.66rem;color:var(--orange);text-transform:uppercase;letter-spacing:.06em;margin:.15rem 0 .6rem}
+    .team-card p{font-size:.81rem;color:var(--t2);line-height:1.55}
+    .team-quote{margin-top:.7rem;font-size:.78rem;color:var(--t3);font-style:italic;border-left:2px solid var(--b2);padding-left:.7rem}
+    .ai-badge{display:inline-block;margin-top:.8rem;font-family:var(--mono);font-size:.56rem;color:#c4b5fd;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.22);padding:.14rem .45rem;border-radius:4px;text-transform:uppercase;letter-spacing:.05em}
+    /* ── marketplace category cards ── */
+    .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem;margin-top:2rem}
+    .cat-card{background:var(--s2);border:1px solid var(--b1);border-radius:14px;padding:1.5rem;display:flex;flex-direction:column;gap:.5rem;transition:border-color .2s,transform .15s}
+    .cat-card:hover{border-color:var(--orange);transform:translateY(-3px)}
+    .cat-ico{font-size:1.7rem}
+    .cat-card h3{font-size:1rem;color:var(--white);font-weight:700}
+    .cat-card p{font-size:.8rem;color:var(--t2);line-height:1.5;flex:1}
+    .cat-meta{display:flex;align-items:center;justify-content:space-between;margin-top:.4rem}
   </style>
 </head>
 <body>
@@ -651,7 +697,9 @@
     <a href="#" class="nav-logo"><span class="nav-logo-dot"></span> Aethyro</a>
     <div class="nav-links">
       <a href="#engine"   class="nav-link">Engine</a>
+      <a href="#team"     class="nav-link">Team</a>
       <a href="#agents"   class="nav-link">Agents</a>
+      <a href="#examples" class="nav-link">Examples</a>
       <a href="#software" class="nav-link">Products</a>
       <a href="#ecosystem" class="nav-link">Ecosystem</a>
       <a href="#data"     class="nav-link">Datasets</a>
@@ -782,6 +830,63 @@
 
 <div class="divider"></div>
 
+<div class="divider"></div>
+
+<!-- ── MEET THE AI TEAM (personas) ── -->
+<section class="marketplace-section" id="team">
+  <div class="container">
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">The minds behind Aethyro</span>
+        <h2>Meet your <span class="grad-mix">AI team.</span></h2>
+        <p class="sec-sub" style="margin-top:.5rem">Aethyro is steered by named expert personas — each a distinct voice with its own domain. Yes, they're AI. That's the point: specialized intelligence, always on call.</p>
+      </div>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar" style="background:rgba(255,77,0,.12)">🧠</div>
+        <div class="team-name">Marcus</div>
+        <div class="team-role">Chief Science</div>
+        <p>Architecture &amp; research direction — hyperdimensional computing, active inference, and self-improving systems.</p>
+        <div class="team-quote">"The interesting part isn't that it works — it's that it improves itself."</div>
+        <span class="ai-badge">AI persona</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background:rgba(0,212,255,.1)">⚖️</div>
+        <div class="team-name">Priya</div>
+        <div class="team-role">Legal &amp; Compliance</div>
+        <p>AI governance, IP, data privacy, and commercial terms — so what you build stays defensible.</p>
+        <div class="team-quote">"Before we ship it, I want the privacy story airtight."</div>
+        <span class="ai-badge">AI persona</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background:rgba(139,92,246,.1)">🔬</div>
+        <div class="team-name">Elena</div>
+        <div class="team-role">Research</div>
+        <p>Cognitive architecture &amp; memory — predictive processing and the GhostRecall/HCM memory systems.</p>
+        <div class="team-quote">"Memory is the difference between a tool and a partner."</div>
+        <span class="ai-badge">AI persona</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background:rgba(34,197,94,.1)">📈</div>
+        <div class="team-name">Rafael</div>
+        <div class="team-role">Revenue</div>
+        <p>Go-to-market, partnerships, and pricing — translating deep tech into something a business buys.</p>
+        <div class="team-quote">"Local-first isn't a feature — for some firms it's the whole reason."</div>
+        <span class="ai-badge">AI persona</span>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background:rgba(245,158,11,.12)">🛡️</div>
+        <div class="team-name">Kenji</div>
+        <div class="team-role">Security &amp; Infra</div>
+        <p>Zero-trust, hardware fingerprinting, and cryptographic licensing — the locks that keep it sovereign.</p>
+        <div class="team-quote">"Three issues. I'll fix two before you finish reading this."</div>
+        <span class="ai-badge">AI persona</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ── SOVEREIGN AGENTS (first-party) ── -->
 <section class="marketplace-section" id="agents">
   <div class="container">
@@ -845,6 +950,147 @@
 </section>
 
 <div class="divider"></div>
+
+<div class="divider"></div>
+
+<!-- ── EXAMPLE OUTPUTS / TASK EXPLORER ── -->
+<section class="marketplace-section" id="examples">
+  <div class="container">
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">See it work</span>
+        <h2>What your agents <span class="grad-orange">actually do.</span></h2>
+        <p class="sec-sub" style="margin-top:.5rem">Pick a role — see real example tasks and the kind of output you get back. Everything runs locally on your hardware.</p>
+      </div>
+    </div>
+
+    <div class="tabs" data-tabs="ex">
+      <button class="tab active" data-tab="ex" data-target="ex-dev">Developer</button>
+      <button class="tab" data-tab="ex" data-target="ex-cpa">Accountant</button>
+      <button class="tab" data-tab="ex" data-target="ex-analyst">Analyst</button>
+      <button class="tab" data-tab="ex" data-target="ex-founder">Founder</button>
+    </div>
+
+    <!-- Developer -->
+    <div class="tab-panel active" id="ex-dev">
+      <div class="io-card">
+        <span class="io-role">forge · code</span>
+        <div class="io-in"><span class="lbl">You ask</span>Write a Python HTTP GET with retries + exponential backoff.</div>
+        <div class="io-out"><span class="lbl">forge returns</span>def get_with_retry(url, retries=4, base=0.5):
+    for i in range(retries):
+        try:
+            r = requests.get(url, timeout=10)
+            r.raise_for_status(); return r
+        except requests.RequestException:
+            if i == retries - 1: raise
+            time.sleep(base * 2 ** i)</div>
+        <span class="io-note">// example output · 100% local</span>
+      </div>
+      <div class="io-card">
+        <span class="io-role">sentinel · security</span>
+        <div class="io-in"><span class="lbl">You ask</span>Review this login handler for vulnerabilities.</div>
+        <div class="io-out"><span class="lbl">sentinel returns</span>HIGH — SQL injection (CWE-89)
+  user input concatenated into query.
+  Fix: parameterized query / ORM binding.
+MEDIUM — no rate limit on /login (OWASP A07)
+  Fix: lockout after N attempts.</div>
+        <span class="io-note">// references OWASP Top 10 + CWE</span>
+      </div>
+      <div class="io-card">
+        <span class="io-role">codex · docs</span>
+        <div class="io-in"><span class="lbl">You ask</span>Document this module as a README.</div>
+        <div class="io-out"><span class="lbl">codex returns</span># payments
+
+Idempotent Stripe checkout + webhook.
+
+## Usage
+    create_checkout(plan="cpa")
+
+## Webhook events
+- checkout.session.completed → mark active
+- subscription.deleted → revoke</div>
+        <span class="io-note">// markdown, with examples</span>
+      </div>
+    </div>
+
+    <!-- Accountant -->
+    <div class="tab-panel" id="ex-cpa">
+      <div class="io-card">
+        <span class="io-role">Aethyro CPA · tax research</span>
+        <div class="io-in"><span class="lbl">You ask</span>Is a home-office deduction allowed for a W-2 employee in 2025?</div>
+        <div class="io-out"><span class="lbl">CPA returns</span>Generally no. TCJA suspended unreimbursed
+employee expenses (incl. home office) through
+2025 under IRC §67(g). Exceptions: certain
+reservists, performing artists, fee-basis officials.
+Self-employed (Sch. C) still qualify.</div>
+        <span class="io-note">// grounded in IRC/regs · on your hardware</span>
+      </div>
+      <div class="io-card">
+        <span class="io-role">Aethyro CPA · drafting</span>
+        <div class="io-in"><span class="lbl">You ask</span>Draft an IRS penalty-abatement request (first-time).</div>
+        <div class="io-out"><span class="lbl">CPA returns</span>Re: Request for First-Time Abate, TY2024
+Taxpayer has a clean 3-yr compliance history
+and filed/paid in good faith... [full letter]</div>
+        <span class="io-note">// editable draft · client data never leaves the office</span>
+      </div>
+      <div class="io-card">
+        <span class="io-role">oracle · document Q&amp;A</span>
+        <div class="io-in"><span class="lbl">You ask</span>What's the depreciation method in this client's prior return?</div>
+        <div class="io-out"><span class="lbl">oracle returns</span>MACRS, 7-yr, half-year convention
+(source: 2023 return, Form 4562, line 19c).</div>
+        <span class="io-note">// answers from your files, with citations</span>
+      </div>
+    </div>
+
+    <!-- Analyst -->
+    <div class="tab-panel" id="ex-analyst">
+      <div class="io-card">
+        <span class="io-role">oracle · research</span>
+        <div class="io-in"><span class="lbl">You ask</span>Summarize the key risks across these 40 contracts.</div>
+        <div class="io-out"><span class="lbl">oracle returns</span>3 themes: (1) uncapped indemnity in 11 docs,
+(2) auto-renew w/ 90-day notice in 18,
+(3) governing law split CA/NY/DE.
+Each w/ doc + clause citation.</div>
+        <span class="io-note">// multi-doc RAG with citations</span>
+      </div>
+      <div class="io-card">
+        <span class="io-role">nexus · orchestration</span>
+        <div class="io-in"><span class="lbl">You ask</span>Build me a diligence workflow for this data room.</div>
+        <div class="io-out"><span class="lbl">nexus returns</span>1 oracle → extract + classify docs
+2 sentinel → flag risk clauses
+3 codex → assemble memo
+deps mapped, runs in sequence.</div>
+        <span class="io-note">// routes work across the swarm</span>
+      </div>
+    </div>
+
+    <!-- Founder -->
+    <div class="tab-panel" id="ex-founder">
+      <div class="io-card">
+        <span class="io-role">avery · strategy</span>
+        <div class="io-in"><span class="lbl">You ask</span>Give me a 90-day GTM plan for a local-AI product.</div>
+        <div class="io-out"><span class="lbl">avery returns</span>KAIROS plan:
+Kickoff  — pick 1 vertical (CPA firms)
+Align    — "can't leak data" message
+Implement— trial→paid funnel live
+Refine   — 5 design-partner calls
+Optimize — double down on best channel
+Scale    — case studies → ads</div>
+        <span class="io-note">// KAIROS framework · actionable</span>
+      </div>
+      <div class="io-card">
+        <span class="io-role">avery · strategy</span>
+        <div class="io-in"><span class="lbl">You ask</span>Should I price per-seat or flat?</div>
+        <div class="io-out"><span class="lbl">avery returns</span>Flat. Your cost is fixed (local compute),
+buyers fear metered AI bills, and flat is
+the differentiator vs per-token APIs.
+Add seats only at the team tier.</div>
+        <span class="io-note">// reasoned recommendation</span>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 <!-- ── ECOSYSTEM (third-party, honest) ── -->
 <section class="marketplace-section" id="ecosystem">
@@ -1006,6 +1252,55 @@
 
 <div class="divider"></div>
 
+<div class="divider"></div>
+
+<!-- ── COST CALCULATOR ── -->
+<section class="marketplace-section" id="savings">
+  <div class="container">
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">Cost calculator</span>
+        <h2>$0 per query <span class="grad-cyan">adds up fast.</span></h2>
+        <p class="sec-sub" style="margin-top:.5rem">Hosted APIs bill every call. Aethyro is flat — unlimited local inference. Move the sliders.</p>
+      </div>
+    </div>
+    <div class="calc">
+      <div class="calc-row"><label>Queries per month</label><input type="range" id="cq" min="1000" max="2000000" step="1000" value="100000"/><span class="calc-val" id="cqv">100,000</span></div>
+      <div class="calc-row"><label>Hosted API cost / 1K queries</label><input type="range" id="cr" min="2" max="60" step="1" value="10"/><span class="calc-val" id="crv">$10</span></div>
+      <div class="calc-result">
+        <div class="calc-box"><div class="big" id="apiCost" style="color:#fca5a5">$1,000</div><div class="lbl">Hosted API / mo</div></div>
+        <div class="calc-box win"><div class="big" id="aeCost" style="color:var(--green)">$29</div><div class="lbl">Aethyro flat / mo</div></div>
+      </div>
+      <p class="calc-save">You'd save <b id="saveMo">$971</b>/mo — about <b id="saveYr">$11,652</b>/yr.</p>
+      <p class="calc-note">// illustrative · "API cost / 1K queries" is your own assumption · Aethyro baseline = Personal $29/mo, unlimited local inference</p>
+      <div style="text-align:center;margin-top:1.25rem"><a href="/app/signup.html" class="btn btn-orange">Start free trial →</a></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── MARKETPLACE CATEGORIES ── -->
+<section class="marketplace-section" id="marketplace">
+  <div class="container">
+    <div class="sec-header">
+      <div>
+        <span class="sec-eyebrow">Marketplace</span>
+        <h2>More than agents.<br/><span class="grad-orange">A whole local-AI toolbox.</span></h2>
+        <p class="sec-sub" style="margin-top:.5rem">Everything you need to run private AI — agents, the workflows they power, and the building blocks to customize them.</p>
+      </div>
+    </div>
+    <div class="cat-grid">
+      <a href="#agents" class="cat-card"><div class="cat-ico">🤖</div><h3>Agents</h3><p>The 6 sovereign specialists — code, memory, security, docs, strategy, orchestration.</p><div class="cat-meta"><span class="badge b-green">Live</span><span class="r-link">Browse →</span></div></a>
+      <a href="#examples" class="cat-card"><div class="cat-ico">⚙️</div><h3>Automations</h3><p>Packaged multi-step workflows — "invoice → PR," "docs → compliance memo," "repo → README."</p><div class="cat-meta"><span class="badge b-cyan">Included</span><span class="r-link">See examples →</span></div></a>
+      <a href="/app/signup.html" class="cat-card"><div class="cat-ico">💬</div><h3>Prompt Packs</h3><p>Curated, role-specific prompt sets for each agent. Copy, run, tweak.</p><div class="cat-meta"><span class="badge b-orange">Free w/ trial</span><span class="r-link">Get them →</span></div></a>
+      <a href="#data" class="cat-card"><div class="cat-ico">🧩</div><h3>Snippets &amp; Recipes</h3><p>Modelfiles, quantization recipes, RAG configs — the building blocks for local deployment.</p><div class="cat-meta"><span class="badge b-violet">Open</span><span class="r-link">Explore →</span></div></a>
+      <a href="#engine" class="cat-card"><div class="cat-ico">📦</div><h3>Agent Bundles</h3><p>Signed <code>.aethyro</code> packages — model + memory + skills + config. One-command deploy.</p><div class="cat-meta"><span class="badge b-gold">New</span><span class="r-link">Learn more →</span></div></a>
+      <a href="#data" class="cat-card"><div class="cat-ico">🏛️</div><h3>Datasets</h3><p>Rare training data from a live agent economy. SFT/RLHF/DPO ready, on HuggingFace.</p><div class="cat-meta"><span class="badge b-green">Live</span><span class="r-link">Browse →</span></div></a>
+    </div>
+  </div>
+</section>
+
 <!-- ── DATASETS ── -->
 <section class="data-section" id="data">
   <div class="container">
@@ -1126,6 +1421,41 @@
   // TODO: paste your Discord (or Slack) invite here — one line powers every Community link.
   const COMMUNITY_URL = "mailto:leer4030@gmail.com?subject=Aethyro%20Community%20-%20request%20invite";
   document.querySelectorAll('[data-community]').forEach(a => { a.href = COMMUNITY_URL; });
+  // tab groups (data-tabs / data-target)
+  document.querySelectorAll('.tab[data-tab]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var group = btn.getAttribute('data-tab');
+      document.querySelectorAll('.tab[data-tab="'+group+'"]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var targetId = btn.getAttribute('data-target');
+      var panels = document.querySelectorAll('#'+targetId).length ? [document.getElementById(targetId)] : [];
+      // hide siblings sharing the same panel container
+      var panel = document.getElementById(targetId);
+      if(panel){
+        panel.parentElement.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+        panel.classList.add('active');
+      }
+    });
+  });
+
+  // cost calculator
+  (function(){
+    var cq=document.getElementById('cq'), cr=document.getElementById('cr');
+    if(!cq||!cr) return;
+    var fmt=function(n){ return '$'+Math.round(n).toLocaleString(); };
+    function update(){
+      var q=+cq.value, rate=+cr.value;
+      var api=(q/1000)*rate, ae=29, save=Math.max(0, api-ae);
+      document.getElementById('cqv').textContent=(+q).toLocaleString();
+      document.getElementById('crv').textContent='$'+rate;
+      document.getElementById('apiCost').textContent=fmt(api);
+      document.getElementById('aeCost').textContent='$29';
+      document.getElementById('saveMo').textContent=fmt(save);
+      document.getElementById('saveYr').textContent=fmt(save*12);
+    }
+    cq.addEventListener('input',update); cr.addEventListener('input',update); update();
+  })();
+
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       const el = document.getElementById(a.getAttribute('href').slice(1));
