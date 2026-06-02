@@ -720,6 +720,19 @@
     .pack-prompt{background:rgba(0,0,0,.4);border:1px solid var(--b2);border-radius:9px;padding:.7rem .85rem;font-family:var(--mono);font-size:.74rem;color:var(--cyan);line-height:1.5;position:relative}
     .pack-copy{position:absolute;top:.5rem;right:.5rem;font-size:.6rem;color:var(--t3);cursor:pointer;background:rgba(255,255,255,.05);border:1px solid var(--b1);border-radius:4px;padding:.15rem .4rem;font-family:var(--font)}
     .pack-copy:hover{color:var(--text)}
+
+    /* ── Industry toggle ── */
+    .ind-tab{
+      padding:.38rem .85rem;font-size:.75rem;font-weight:700;
+      background:rgba(255,255,255,.03);border:1px solid var(--b2);
+      border-radius:100px;color:var(--t2);cursor:pointer;
+      font-family:var(--font);transition:all .18s;
+    }
+    .ind-tab:hover{border-color:var(--b3);color:var(--text)}
+    .ind-tab.active{
+      background:rgba(255,77,0,.1);border-color:var(--orange);
+      color:var(--orange);
+    }
   </style>
 </head>
 <body>
@@ -732,14 +745,12 @@
     <span class="ticker-item"><span class="ticker-dot"></span>100% local inference — zero data egress</span>
     <span class="ticker-item"><span class="ticker-dot"></span>14-day free trial — no credit card</span>
     <span class="ticker-item"><span class="ticker-dot"></span>Avery — a Qwen2.5-3B sovereign strategist (fine-tuned)</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>Datasets on HuggingFace: tastytator/sovereign-economy</span>
     <span class="ticker-item"><span class="ticker-dot"></span>Runs alongside any Ollama-compatible agent</span>
     <span class="ticker-item"><span class="ticker-dot"></span>GH05T3 — a self-improving AI engine (KAIROS/SAGE)</span>
     <span class="ticker-item"><span class="ticker-dot"></span>6 sovereign agents: forge · oracle · sentinel · codex · avery · nexus</span>
     <span class="ticker-item"><span class="ticker-dot"></span>100% local inference — zero data egress</span>
     <span class="ticker-item"><span class="ticker-dot"></span>14-day free trial — no credit card</span>
     <span class="ticker-item"><span class="ticker-dot"></span>Avery — a Qwen2.5-3B sovereign strategist (fine-tuned)</span>
-    <span class="ticker-item"><span class="ticker-dot"></span>Datasets on HuggingFace: tastytator/sovereign-economy</span>
     <span class="ticker-item"><span class="ticker-dot"></span>Runs alongside any Ollama-compatible agent</span>
   </div>
 </div>
@@ -755,7 +766,6 @@
       <a href="#examples" class="nav-link">Examples</a>
       <a href="#software" class="nav-link">Products</a>
       <a href="#ecosystem" class="nav-link">Ecosystem</a>
-      <a href="#data"     class="nav-link">Datasets</a>
       <a href="#community" class="nav-link">Community</a>
       <a href="/app/newsletter.html" class="nav-link">Newsletter</a>
     </div>
@@ -774,23 +784,47 @@
   <div class="hero-orb orb-violet"></div>
 
   <div class="hero-left">
-    <div class="hero-status">
-      <span class="b-live" style="background:none;border:none;padding:0;font-family:var(--mono);font-size:.72rem">GH05T3 ENGINE ONLINE</span>
-      &nbsp;·&nbsp; 6 AGENTS &nbsp;·&nbsp; 100% LOCAL
+
+    <!-- ── Industry Toggle (unique feature) ── -->
+    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.25rem;flex-wrap:wrap">
+      <span style="font-size:.72rem;font-family:var(--mono);color:var(--t3)">I'm a</span>
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap" id="industry-tabs">
+        <button class="ind-tab active" data-ind="cpa" onclick="setIndustry('cpa')">CPA Firm</button>
+        <button class="ind-tab" data-ind="law" onclick="setIndustry('law')">Law Firm</button>
+        <button class="ind-tab" data-ind="medical" onclick="setIndustry('medical')">Medical Practice</button>
+        <button class="ind-tab" data-ind="realty" onclick="setIndustry('realty')">Real Estate</button>
+      </div>
     </div>
-    <h1>The self-improving<br/>engine for <span class="grad-mix">private&nbsp;AI.</span></h1>
-    <p class="hero-sub">
-      Aethyro runs on <strong>GH05T3</strong> — a sovereign AI engine that orchestrates a swarm of
-      specialist agents, runs entirely on your hardware, and improves itself. Your data never leaves your machine.
+
+    <div class="hero-status">
+      <span class="b-live" style="background:none;border:none;padding:0;font-family:var(--mono);font-size:.72rem">AETHYRO ONLINE</span>
+      &nbsp;·&nbsp; 6 AGENTS &nbsp;·&nbsp; 100% LOCAL &nbsp;·&nbsp; <span style="color:var(--green)">0 bytes sent externally</span>
+    </div>
+
+    <h1 id="hero-headline">Private AI for <span class="grad-mix">CPA&nbsp;firms</span><br/>that never leaves<br/>your office.</h1>
+
+    <p class="hero-sub" id="hero-sub">
+      Aethyro handles client intake, document drafting, and tax prep research — running entirely on your hardware. Your clients' data never touches a cloud server. HIPAA and attorney-client privilege safe by design.
     </p>
+
+    <!-- Privacy Proof Counter (unique feature) -->
+    <div style="display:flex;align-items:center;gap:.65rem;margin:.85rem 0 1.25rem;padding:.6rem .9rem;background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.15);border-radius:10px;width:fit-content">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex-shrink:0"></div>
+      <span style="font-family:var(--mono);font-size:.72rem;color:var(--t2)">
+        <b style="color:var(--green)">0 bytes</b> of client data transmitted to external servers &nbsp;·&nbsp; ever.
+      </span>
+    </div>
+
     <div class="hero-actions">
-      <a href="/app/signup.html" class="btn btn-lg btn-orange">Start Free Trial →</a>
+      <a href="https://calendly.com/leer4030" target="_blank" rel="noopener" class="btn btn-lg btn-orange">Book a Free Demo →</a>
       <a href="#engine" class="btn btn-lg btn-ghost">See how it works</a>
     </div>
-    <div class="hero-meta">
-      <div class="meta-stat"><strong>6</strong><span>Sovereign agents</span></div>
-      <div class="meta-stat"><strong>4</strong><span>Products</span></div>
-      <div class="meta-stat"><strong>$0</strong><span>API costs</span></div>
+    <div style="margin-top:.65rem;font-size:.72rem;color:var(--t3);font-family:var(--mono)">// no credit card · 14-day free trial · async setup, no calls required</div>
+
+    <div class="hero-meta" style="margin-top:1.5rem">
+      <div class="meta-stat"><strong>6</strong><span>AI specialists</span></div>
+      <div class="meta-stat"><strong id="hero-usecase">CPA</strong><span>workflows ready</span></div>
+      <div class="meta-stat"><strong>$0</strong><span>API costs ever</span></div>
       <div class="meta-stat"><strong>14<span style="color:var(--orange);font-size:1rem">d</span></strong><span>Free trial</span></div>
     </div>
   </div>
@@ -1447,61 +1481,7 @@ Add seats only at the team tier.</div>
   </div>
 </section>
 
-<!-- ── DATASETS ── -->
-<section class="data-section" id="data">
-  <div class="container">
-    <div class="sec-header">
-      <div>
-        <span class="sec-eyebrow">Dataset Marketplace</span>
-        <h2>Rare AI training data.<br/><span class="grad-cyan">From a live agent economy.</span></h2>
-        <p class="sec-sub" style="margin-top:.5rem">Datasets generated by our multi-agent economy simulation. Published under <a href="https://huggingface.co/tastytator" target="_blank" rel="noopener">tastytator</a> on HuggingFace.</p>
-      </div>
-    </div>
-    <div class="data-grid">
 
-      <div class="d-card d-featured">
-        <div class="d-top"><div class="d-icon">🏛️</div><div><span class="badge b-green">Featured</span></div></div>
-        <div><div class="d-name">SovereignCore Economy Dataset</div><div class="d-version">tastytator/sovereign-economy · HuggingFace</div></div>
-        <p class="d-desc">Simulated economic transactions from a multi-agent AI economy across evolutionary generations — agent decision logs, negotiation transcripts, resource allocation, and fitness metrics. For multi-agent and emergent-behavior research.</p>
-        <div class="d-formats"><span class="d-fmt">.parquet</span><span class="d-fmt">.jsonl</span><span class="d-fmt">.csv</span></div>
-        <div class="d-use">Best for: RL training, multi-agent simulation, emergent-behavior research, agent eval benchmarks.</div>
-        <div class="d-price-row">
-          <div class="d-price"><span class="amt">$2,500</span><span class="per"> one-time</span><br/><span class="orig">or $499/mo</span></div>
-          <a href="mailto:leer4030@gmail.com?subject=SovereignCore%20Dataset" class="btn-data btn-data-orange">Request access →</a>
-        </div>
-      </div>
-
-      <div class="d-card">
-        <div class="d-top"><div class="d-icon">🧠</div><div><span class="badge b-orange">Training</span></div></div>
-        <div><div class="d-name">Sovereign Agent Training Pairs</div><div class="d-version">tastytator/sovereign-economy · HuggingFace</div></div>
-        <p class="d-desc">Curated instruction-response pairs from agent interactions across the sovereign roles (oracle, forge, codex, nexus, sentinel), each with role context, reasoning, and a quality score. SFT / RLHF / DPO ready.</p>
-        <div class="d-formats"><span class="d-fmt">.jsonl</span><span class="d-fmt">HuggingFace</span><span class="d-fmt">.parquet</span></div>
-        <div class="d-use">Best for: SFT fine-tuning, RLHF pipelines, DPO training, agent persona specialization.</div>
-        <div class="d-price-row">
-          <div class="d-price"><span class="amt">$799</span><span class="per"> one-time</span><br/><span class="orig">or $149/mo</span></div>
-          <a href="mailto:leer4030@gmail.com?subject=Training%20Pairs%20Dataset" class="btn-data btn-data-green">Request access →</a>
-        </div>
-      </div>
-
-      <div class="d-card" style="border-style:dashed">
-        <div class="d-top"><div class="d-icon">🔧</div><div><span class="badge b-gold">Custom</span></div></div>
-        <div><div class="d-name">Custom Dataset Request</div><div class="d-version">Bespoke extraction</div></div>
-        <p class="d-desc">Need a specific slice — custom time windows, agent cohorts, or filters? Extracted in your required format with schema documentation. NDAs available.</p>
-        <div class="d-formats"><span class="d-fmt">Any format</span><span class="d-fmt">Custom schema</span><span class="d-fmt">NDA ok</span></div>
-        <div class="d-use">Enterprise licensing supported. Quote within 48h.</div>
-        <div class="d-price-row">
-          <div class="d-price"><span class="amt">Custom</span><br/><span class="orig">Quote in 48h</span></div>
-          <a href="mailto:leer4030@gmail.com?subject=Custom%20Dataset%20Request" class="btn-data btn-data-orange">Request quote →</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<div class="divider"></div>
 
 <!-- ── ECONOMY VISUALIZATION ── -->
 <section class="marketplace-section" id="economy">
@@ -1510,7 +1490,7 @@ Add seats only at the team tier.</div>
       <div>
         <span class="sec-eyebrow">Under the hood</span>
         <h2>A live <span class="grad-mix">agent economy.</span></h2>
-        <p class="sec-sub" style="margin-top:.5rem">GH05T3 runs its own multi-agent economy — agents negotiate, trade, and specialize. The data it generates is what we publish as datasets.</p>
+        <p class="sec-sub" style="margin-top:.5rem">GH05T3 runs its own multi-agent economy — agents negotiate, trade, and specialize. The data it generates trains our sovereign agents continuously.</p>
       </div>
     </div>
     <div class="viz-wrap">
@@ -1588,7 +1568,6 @@ Add seats only at the team tier.</div>
       <a href="#engine">The Engine</a>
       <a href="#agents">Sovereign Agents</a>
       <a href="#software">Products</a>
-      <a href="#data">Datasets</a>
       <a href="/app/newsletter.html">Newsletter</a>
     </div>
     <div class="footer-col">
@@ -1601,14 +1580,21 @@ Add seats only at the team tier.</div>
     </div>
     <div class="footer-col">
       <h4>Company</h4>
+      <a href="/terms.html">Terms of Service</a>
+      <a href="/privacy.html">Privacy Policy</a>
       <a href="mailto:leer4030@gmail.com">Contact</a>
       <a href="mailto:leer4030@gmail.com?subject=Enterprise">Enterprise</a>
       <a href="mailto:leer4030@gmail.com?subject=Partnership">Partnerships</a>
     </div>
   </div>
-  <div class="footer-bottom">
+  <div style="background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.06);padding:1rem 1.5rem;text-align:center;">
+  <p style="font-size:.72rem;color:#444;font-family:var(--mono);max-width:900px;margin:0 auto;line-height:1.7;">
+    Aethyro is productivity software. It does not constitute legal, medical, financial, or professional advice. All AI-generated outputs should be reviewed by a qualified professional before use. Aethyro processes all data locally on your hardware — no client data is transmitted to, stored on, or processed by Aethyro systems.
+  </p>
+</div>
+<div class="footer-bottom">
     <p>© 2026 Aethyro · <a href="mailto:leer4030@gmail.com">leer4030@gmail.com</a></p>
-    <p>aethyro.com · Powered by SovereignNation</p>
+    <p>aethyro.com &nbsp;·&nbsp; <a href="/terms.html">Terms</a> &nbsp;·&nbsp; <a href="/privacy.html">Privacy</a></p>
   </div>
 </footer>
 
@@ -1731,5 +1717,81 @@ Add seats only at the team tier.</div>
     });
   });
 </script>
+
+<script>
+/* ── Industry Toggle ── */
+var INDUSTRIES = {
+  cpa: {
+    headline: 'Private AI for <span class="grad-mix">CPA&nbsp;firms</span><br/>that never leaves<br/>your office.',
+    sub: 'Aethyro handles client intake, document review, tax research, and billing drafts — running entirely on your hardware. Your clients\' data never touches a cloud server. Zero compliance risk.',
+    usecase: 'CPA',
+    pill: '🧾 Tax prep · Client intake · Billing · Document review'
+  },
+  law: {
+    headline: 'Private AI for <span class="grad-mix">law&nbsp;firms</span><br/>protected by<br/>attorney-client privilege.',
+    sub: 'Aethyro drafts contracts, researches case law, and automates client intake — all on your hardware. Attorney-client privilege intact. No cloud exposure. No bar association risk.',
+    usecase: 'Legal',
+    pill: '⚖️ Contract review · Case research · Client intake · Deadline tracking'
+  },
+  medical: {
+    headline: 'HIPAA-compliant AI<br/>for <span class="grad-mix">medical&nbsp;practices</span><br/>on your hardware.',
+    sub: 'Aethyro automates patient intake, summarizes records, suggests billing codes, and drafts referral letters — locally. Patient data never leaves your office. Built for HIPAA from the ground up.',
+    usecase: 'Medical',
+    pill: '🏥 Patient intake · Record summaries · Billing codes · Referrals'
+  },
+  realty: {
+    headline: 'AI that closes more deals<br/>for <span class="grad-mix">real&nbsp;estate</span><br/>agents. Privately.',
+    sub: 'Aethyro qualifies leads, writes listing descriptions, drafts offers, and follows up with clients 24/7 — on your hardware. One closed deal pays for a full year. Zero cloud fees.',
+    usecase: 'Realty',
+    pill: '🏡 Lead follow-up · Listing copy · Offer drafts · Market analysis'
+  }
+};
+
+function setIndustry(ind) {
+  var data = INDUSTRIES[ind];
+  if (!data) return;
+
+  // Update tabs
+  document.querySelectorAll('.ind-tab').forEach(function(t) {
+    t.classList.toggle('active', t.dataset.ind === ind);
+  });
+
+  // Animate headline change
+  var h = document.getElementById('hero-headline');
+  var s = document.getElementById('hero-sub');
+  var u = document.getElementById('hero-usecase');
+  var p = document.getElementById('ind-pill');
+
+  if (h) { h.style.opacity = '0'; h.style.transform = 'translateY(6px)';
+    setTimeout(function(){ h.innerHTML = data.headline; h.style.opacity='1'; h.style.transform='translateY(0)'; }, 150); }
+  if (s) { s.style.opacity = '0';
+    setTimeout(function(){ s.textContent = data.sub; s.style.opacity='1'; }, 200); }
+  if (u) u.textContent = data.usecase;
+  if (p) p.textContent = data.pill;
+}
+
+// Apply transitions
+var h = document.getElementById('hero-headline');
+var s = document.getElementById('hero-sub');
+if (h) h.style.transition = 'opacity .2s ease, transform .2s ease';
+if (s) s.style.transition = 'opacity .2s ease';
+
+// ROI breach cost calculator (risk-based, not just ROI)
+var BREACH_COSTS = { cpa: 4450000, law: 5600000, medical: 10930000, realty: 2300000 };
+var CLIENTS      = { cpa: 150,     law: 80,       medical: 800,        realty: 200 };
+
+// Add use-case pill below hero sub if not present
+document.addEventListener('DOMContentLoaded', function() {
+  var sub = document.getElementById('hero-sub');
+  if (sub && !document.getElementById('ind-pill')) {
+    var pill = document.createElement('div');
+    pill.id = 'ind-pill';
+    pill.style.cssText = 'margin-top:.6rem;font-size:.72rem;font-family:var(--mono);color:var(--t3);';
+    pill.textContent = INDUSTRIES.cpa.pill;
+    sub.parentNode.insertBefore(pill, sub.nextSibling);
+  }
+});
+</script>
 </body>
 </html>
+
