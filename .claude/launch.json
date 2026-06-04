@@ -1,0 +1,1 @@
+{"version":"0.0.1","configurations":[{"name":"aethyro-landing","runtimeExecutable":"python","runtimeArgs":["-m","http.server","8096"],"port":8096}]}

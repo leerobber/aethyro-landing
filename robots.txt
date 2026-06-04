@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Allow: /app/newsletter.html
 Disallow: /app/
 
 Sitemap: https://aethyro.com/sitemap.xml

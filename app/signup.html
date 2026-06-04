@@ -9,6 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="./style.css"/>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BE319Z71PD"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BE319Z71PD');</script>
 </head>
 <body>
 <div class="wrap">
@@ -43,6 +46,7 @@
     try{
       var r=await supabase.auth.signUp({ email:email, password:password });
       if(r.error){ show(r.error.message,'err'); btn.disabled=false; btn.textContent='Create account & start trial →'; return; }
+      if(typeof gtag!=='undefined'){ gtag('event','sign_up',{method:'email'}); gtag('event','begin_checkout',{currency:'USD',value:0}); }
       if(r.data && r.data.session){ location.href='./dashboard.html'; return; }
       show('Account created. Check your email to confirm, then log in.','ok'); btn.textContent='Check your email ✓';
     }catch(err){ show((err&&err.message)||String(err),'err'); btn.disabled=false; btn.textContent='Create account & start trial →'; }
