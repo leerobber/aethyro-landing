@@ -1,0 +1,46 @@
+name: CI — Validate & Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check HTML files exist
+        run: |
+          test -f index.html && echo "✓ index.html"
+          test -f pricing.html && echo "✓ pricing.html"
+          test -f .well-known/mcp.json && echo "✓ .well-known/mcp.json"
+          test -f sitemap.xml && echo "✓ sitemap.xml"
+      - name: Validate JSON-LD in index.html
+        run: |
+          python3 -c "
+          import re, json, sys
+          html = open('index.html').read()
+          blocks = re.findall(r'<script type=\"application/ld\\+json\">(.*?)</script>', html, re.DOTALL)
+          for b in blocks:
+              json.loads(b)
+          print(f'✓ {len(blocks)} valid JSON-LD block(s) found')
+          "
+      - name: Validate WebMCP manifest
+        run: python3 -c "import json; json.load(open('.well-known/mcp.json')); print('✓ mcp.json valid')"
+      - name: Check semantic HTML
+        run: |
+          python3 -c "
+          html = open('index.html').read()
+          checks = [('<main', 'has <main>'), ('aria-label', 'has aria-label'), ('application/ld+json', 'has JSON-LD')]
+          all_ok = True
+          for tag, label in checks:
+              if tag in html:
+                  print(f'✓ {label}')
+              else:
+                  print(f'✗ MISSING: {label}')
+                  all_ok = False
+          if not all_ok:
+              raise SystemExit(1)
+          "

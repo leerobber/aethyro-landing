@@ -3,4 +3,7 @@ Allow: /
 Allow: /app/newsletter.html
 Disallow: /app/
 
+# AI Agent discovery
+Allow: /.well-known/mcp.json
+
 Sitemap: https://aethyro.com/sitemap.xml

@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "name": "Aethyro",
+  "description": "Private local AI platform — runs 100% on your hardware, zero data egress",
+  "contact_email": "leer4030@gmail.com",
+  "base_url": "https://aethyro.com",
+  "actions": [
+    {
+      "id": "get_plans",
+      "name": "Get Pricing Plans",
+      "description": "Retrieve all Aethyro subscription plans and pricing",
+      "url": "https://aethyro.com/pricing.html",
+      "method": "GET",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "plans": { "type": "array", "items": { "type": "object" } }
+        }
+      }
+    },
+    {
+      "id": "get_marketplace",
+      "name": "Browse Agent Marketplace",
+      "description": "Browse available AI agent plugins and extensions",
+      "url": "https://aethyro.com/marketplace/",
+      "method": "GET"
+    },
+    {
+      "id": "start_trial",
+      "name": "Start Free Trial",
+      "description": "Begin a 14-day free trial of Aethyro — no credit card required",
+      "url": "https://buy.stripe.com/4gM8wQ60HfnUbZQedx7bW00",
+      "method": "GET"
+    },
+    {
+      "id": "get_features",
+      "name": "Get Platform Features",
+      "description": "Learn about Aethyro's sovereign AI agents, KAIROS/SAGE loop, and privacy guarantees",
+      "url": "https://aethyro.com/#engine",
+      "method": "GET"
+    },
+    {
+      "id": "contact",
+      "name": "Contact Aethyro",
+      "description": "Send email to the Aethyro team",
+      "url": "mailto:leer4030@gmail.com",
+      "method": "GET"
+    }
+  ],
+  "capabilities": {
+    "agent_readable": true,
+    "structured_data": true,
+    "schema_org": true,
+    "aria_compliant": true
+  }
+}
